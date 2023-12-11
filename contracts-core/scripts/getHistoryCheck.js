@@ -79,33 +79,42 @@ const save = (value, field, subfield = undefined) => {
     var transactionNumberInArray;
     var lastBlock=[undefined];
     const extractOneMoreTransaction = async (lastBlock) => {
-        const sync = async () => {
+        const sync = async (lastBlock) => {
             //get block with transactions
             //Get the block from the network, where the result.transactions is an Array of TransactionResponse objects.
             console.log(`fetching block ${lastBlock[0].blockNumber}...`);
             lastBlock[0].blockValueWithTransactions = await provider.getBlockWithTransactions(lastBlock[0].blockNumber);
             console.log(`fetched block ${lastBlock[0].blockValueWithTransactions}.`);
             if (!(lastBlock[0].blockValueWithTransactions)) throw new Error(`Unexpected ethers API response for provider.getBlockWithTransactions(${lastBlock[0].blockNumber}): ${lastBlock[0].blockValueWithTransactions}.`);
-            //console.log(`lastBlock[0].blockValueWithTransactions.transactions ${JSON.stringify(lastBlock[0].blockValueWithTransactions.transactions)}.`);
+            /*
+            console.log(`lastBlock[0].blockValueWithTransactions.transactions ${JSON.stringify(lastBlock[0].blockValueWithTransactions.transactions)}.`);
+            console.log(Object.keys(lastBlock[0].blockValueWithTransactions.transactions)); // ['0', '1', '2', '5']
+            console.log("typeof keys[0]: ", typeof Object.keys(lastBlock[0].blockValueWithTransactions.transactions)[0]);
+            console.log("length", lastBlock[0].blockValueWithTransactions.transactions.length); // 6
+            */
             if (!(lastBlock[0].blockValueWithTransactions.transactions)) throw new Error(`Unexpected ethers API response field '.transactions' for provider.getBlockWithTransactions(${lastBlock[0].blockNumber}).transactions: '${lastBlock[0].blockValueWithTransactions.transactions}'.`);
             if (lastBlock[0].blockValueWithTransactions.transactions.length<=0) throw new Error(`Unexpected ethers API response field '.transactions.length' for provider.getBlockWithTransactions(${lastBlock[0].blockNumber}).transactions.length: '${lastBlock[0].blockValueWithTransactions.transactions.length}, expected >0'.`);
             lastBlock[0].txsChecked = 0;
+            lastBlock[0].txsKeys = Object.keys(lastBlock[0].blockValueWithTransactions.transactions);
+            return lastBlock;
         };
         while(true) {
             if (!(lastBlock[0])) {
                 lastBlock[0]={}
                 console.log(`getting latest block number (height)...`);
                 lastBlock[0].blockNumber = await provider.getBlockNumber();
-                sync();
+                lastBlock=await sync(lastBlock);
             }else if (lastBlock[0].blockValueWithTransactions && lastBlock[0].txsChecked >= lastBlock[0].blockValueWithTransactions.transactions.length) {
                 lastBlock[0].blockNumber = lastBlock[0].blockNumber - 1;
-                sync();
+                lastBlock=await sync(lastBlock);
             }
-            const tx = lastBlock[0].blockValueWithTransactions && lastBlock[0].blockValueWithTransactions.transactions[lastBlock[0].txsChecked];
+            const tx = lastBlock[0].blockValueWithTransactions.transactions[lastBlock[0].txsKeys[lastBlock[0].txsChecked]];
             lastBlock[0].txsChecked = lastBlock[0].txsChecked + 1;
+            //console.log("tx", JSON.stringify(tx));
             
-            if(tx.hash == MainnetUmbraContractDeployTxHash) return null;
-            if(tx.from == userAddress) return tx;
+            if(tx.hash.toLowerCase() == MainnetUmbraContractDeployTxHash.toLowerCase()) return null;
+            if(tx.from.toLowerCase() == userAddress.toLowerCase()) return tx;
+            //return tx;
         }
     };
     
@@ -116,7 +125,7 @@ const save = (value, field, subfield = undefined) => {
         //console.log(`Getting tx number ${transactionNumberInArray} of ${txCountToFetch} from: ${network}...`);
         const transactionValue = await extractOneMoreTransaction(lastBlock);
         if (transactionValue === null) break;
-        //save (transactionValue, "transactions", transactionNumberInArray);
+        save (transactionValue, "transactions", transactionNumberInArray);
     }
 
     const timeEnd = new Date();
