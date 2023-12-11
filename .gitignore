@@ -159,3 +159,8 @@ dist
 # deploy history localhost files
 contracts-core/deploy-history/*localhost-*
 lcov.info
+contracts-core/deploy-history/hardhat-*
+*~
+contracts-core/history-check-logs/
+contracts-core/scripts/history-check-logs/
+umbra work2 notes.txt

@@ -11,20 +11,21 @@ import '@nomiclabs/hardhat-waffle';
 import '@nomiclabs/hardhat-web3';
 import '@nomiclabs/hardhat-truffle5';
 import '@nomiclabs/hardhat-ethers';
-import '@nomiclabs/hardhat-etherscan';
+//import '@nomiclabs/hardhat-etherscan';
 import '@typechain/hardhat';
 import 'solidity-coverage';
 import 'hardhat-gas-reporter';
 
 const chainIds = {
-  ganache: 1337,
+  //ganache: 1337,
   hardhat: 1337,
   mainnet: 1,
-  polygon: 137,
+  //polygon: 137,
   arbitrum: 42161,
   optimism: 10,
   sepolia: 11155111,
-  gnosis_chain: 100,
+  //gnosis_chain: 100,
+  
 };
 
 // Ensure that we have all the environment variables we need.
@@ -38,6 +39,7 @@ if (!process.env.MNEMONIC) {
   mnemonic = process.env.MNEMONIC;
 }
 
+/*
 let infuraApiKey = '';
 if (!process.env.INFURA_ID) {
   console.warn('Please set your INFURA_ID in a .env file');
@@ -51,11 +53,12 @@ if (!process.env.ETHERSCAN_VERIFICATION_API_KEY) {
 } else {
   etherscanApiKey = process.env.ETHERSCAN_VERIFICATION_API_KEY;
 }
+*/
 
 const shouldReportGas = process.env.REPORT_GAS === 'true';
 
 function createTestnetConfig(network: keyof typeof chainIds): NetworkUserConfig {
-  const url = `https://${network}.infura.io/v3/${infuraApiKey}`;
+  const url = `infuraApiKey`;
   return {
     accounts: {
       count: 10,
@@ -73,7 +76,7 @@ const config: HardhatUserConfig = {
   networks: {
     hardhat: {
       forking: {
-        url: `https://sepolia.infura.io/v3/${infuraApiKey}`,
+        url: `https://eth.drpc.org`
       },
       chainId: chainIds.hardhat,
       accounts: {
@@ -105,7 +108,7 @@ const config: HardhatUserConfig = {
         path: "m/44'/60'/0'/0",
       },
       chainId: chainIds['mainnet'],
-      url: `https://mainnet.infura.io/v3/${infuraApiKey}`,
+      url: `infuraApiKey`,
       gasPrice: 60000000000, // 60 gwei
     },
     polygon: {
@@ -197,10 +200,11 @@ const config: HardhatUserConfig = {
     currency: 'USD',
     gasPrice: 200,
     excludeContracts: ['TestToken.sol', 'MockHook.sol', 'ERC20.sol'],
-  },
-  etherscan: {
-    apiKey: etherscanApiKey,
-  },
+  }
+  //,
+  //etherscan: {
+  //  apiKey: etherscanApiKey,
+  //},
 };
 
 export default config;

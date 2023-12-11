@@ -1,10 +1,12 @@
 {
   "localhost": {
-    "expectedDeployer": "0x6b8345cAec7A7E7989A3B2e889a33ddbE429a4F9",
-    "toll": 2,
-    "tollCollector": "0x6b8345cAec7A7E7989A3B2e889a33ddbE429a4F9",
-    "tollReceiver": "0x6b8345cAec7A7E7989A3B2e889a33ddbE429a4F9",
-    "expectedRegistryNonce": 5
+    "MainnetDeployer": "0x5777Aa6F437399Af6cef2Fce0BE8D4B4eD7C7232",
+    "MainnetUmbraContract": "0xFb2dc580Eed955B528407b4d36FfaFe3da685401",
+    "MainnetUmbraContractDeployTxBlockNumber": "12343914",
+    "MainnetUmbraContractDeployTxHash": "0x1dbb9dfe4f83466be6ce1cdd19ac690636f02aeb2804785509ead7084fd7134a",
+    "expectedUmbraNonce": 0,
+    "expectedRegistryNonce": 5,
+    "txCountToFetch": 10000
   },
   "anvil": {
     "expectedDeployer": "0xBC425Bde78FD15fC6E35723887db8bC289E765dB",

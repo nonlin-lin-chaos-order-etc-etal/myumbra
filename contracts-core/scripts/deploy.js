@@ -79,7 +79,7 @@ const doBumpNonceTx = async (wallet) => {
     let deployerNonce = await deployerWallet.getTransactionCount();
 
     if (deployerNonce !== 0) {
-      throw new Error('Unexpected non-zero nonce before deploying Umbra');
+      throw new Error(`Unexpected non-zero nonce (${deployerNonce}) before deploying Umbra`);
     }
 
     // deploy the Umbra contract

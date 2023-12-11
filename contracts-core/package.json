@@ -77,6 +77,7 @@
     "prepare": "yarn run typechain",
     "deploy": "yarn build && hardhat run scripts/deploy.js",
     "deploy:registry": "yarn build && hardhat run scripts/deploy-registry.js",
+    "check-history": "yarn build && hardhat run scripts/getHistoryCheck.js",
     "precommit": "lint-staged"
   },
   "volta": {
