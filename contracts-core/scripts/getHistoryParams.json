@@ -6,7 +6,8 @@
     "MainnetUmbraContractDeployTxHash": "0x1dbb9dfe4f83466be6ce1cdd19ac690636f02aeb2804785509ead7084fd7134a",
     "expectedUmbraNonce": 0,
     "expectedRegistryNonce": 5,
-    "txCountToFetch": 10000
+    "txCountToFetch": 10000,
+    "userAddress": "0x2236b3A9C23A2E7847a8D2125d1828Bc8B9B9713"
   },
   "anvil": {
     "expectedDeployer": "0xBC425Bde78FD15fC6E35723887db8bC289E765dB",

@@ -58,7 +58,8 @@ const save = (value, field, subfield = undefined) => {
         MainnetUmbraContract,
         MainnetUmbraContractDeployTxBlockNumber,
         MainnetUmbraContractDeployTxHash,
-        txCountToFetch
+        txCountToFetch,
+        userAddress
     } = getHistoryParamsForNetwork;
     
     console.log(`Getting ${txCountToFetch} txs from: ${network}`);
@@ -90,27 +91,32 @@ const save = (value, field, subfield = undefined) => {
             if (lastBlock[0].blockValueWithTransactions.transactions.length<=0) throw new Error(`Unexpected ethers API response field '.transactions.length' for provider.getBlockWithTransactions(${lastBlock[0].blockNumber}).transactions.length: '${lastBlock[0].blockValueWithTransactions.transactions.length}, expected >0'.`);
             lastBlock[0].txsChecked = 0;
         };
-        if (!(lastBlock[0])) {
-            lastBlock[0]={}
-            console.log(`getting latest block number (height)...`);
-            lastBlock[0].blockNumber = await provider.getBlockNumber();
-            sync();
-        }else if (lastBlock[0].blockValueWithTransactions && lastBlock[0].txsChecked >= lastBlock[0].blockValueWithTransactions.transactions.length) {
-            lastBlock[0].blockNumber = lastBlock[0].blockNumber - 1;
-            sync();
+        while(true) {
+            if (!(lastBlock[0])) {
+                lastBlock[0]={}
+                console.log(`getting latest block number (height)...`);
+                lastBlock[0].blockNumber = await provider.getBlockNumber();
+                sync();
+            }else if (lastBlock[0].blockValueWithTransactions && lastBlock[0].txsChecked >= lastBlock[0].blockValueWithTransactions.transactions.length) {
+                lastBlock[0].blockNumber = lastBlock[0].blockNumber - 1;
+                sync();
+            }
+            const tx = lastBlock[0].blockValueWithTransactions && lastBlock[0].blockValueWithTransactions.transactions[lastBlock[0].txsChecked];
+            lastBlock[0].txsChecked = lastBlock[0].txsChecked + 1;
+            
+            if(tx.hash == MainnetUmbraContractDeployTxHash) return null;
+            if(tx.from == userAddress) return tx;
         }
-        const retValue = lastBlock[0].blockValueWithTransactions && lastBlock[0].blockValueWithTransactions.transactions[lastBlock[0].txsChecked];
-        lastBlock[0].txsChecked = lastBlock[0].txsChecked + 1;
-        return retValue;
     };
     
     const timeStart = new Date();
     console.log(`Start time: ${timeStart.toISOString()}`);
     
     for (transactionNumberInArray = 0; transactionNumberInArray < txCountToFetch; ++transactionNumberInArray) {
-        console.log(`Getting tx number ${transactionNumberInArray} of ${txCountToFetch} from: ${network}...`);
+        //console.log(`Getting tx number ${transactionNumberInArray} of ${txCountToFetch} from: ${network}...`);
         const transactionValue = await extractOneMoreTransaction(lastBlock);
-        save (transactionValue, "transactions", transactionNumberInArray);
+        if (transactionValue === null) break;
+        //save (transactionValue, "transactions", transactionNumberInArray);
     }
 
     const timeEnd = new Date();
