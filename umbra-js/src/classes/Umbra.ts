@@ -118,20 +118,39 @@ const isEth = (token: string) => {
   return getAddress(token) === ETH_ADDRESS; // throws if `token` is not a valid address
 };
 
+const get_rpc_url_by_chain_id = (chainid: number): string => {
+  const KEY_NAME=`HTTPS_ETH_RPC_PROVIDER_URL__CHAINID_${String( BigNumber.from(this.chainConfig.chainId).toNumber()) }`;
+  return get_required_env_var(KEY_NAME);
+}
 /**
  * @notice Returns the Infura RPC URL for the provided chainId and Infura ID
  */
 const infuraUrl = (chainId: BigNumberish, infuraId: string) => {
   chainId = BigNumber.from(chainId).toNumber();
   // For Hardhat, we just use the mainnet chain ID to avoid errors in tests, but this doesn't affect anything.
+  return get_rpc_url_by_chain_id(chainId);
+  /*
   if (chainId === 1 || chainId === 1337) return `https://mainnet.infura.io/v3/${infuraId}`;
   if (chainId === 10) return `https://optimism-mainnet.infura.io/v3/${infuraId}`;
   if (chainId === 100) return 'https://rpc.ankr.com/gnosis';
   if (chainId === 137) return `https://polygon-mainnet.infura.io/v3/${infuraId}`;
   if (chainId === 42161) return `https://arbitrum-mainnet.infura.io/v3/${infuraId}`;
   if (chainId === 11155111) return `https://sepolia.infura.io/v3/${infuraId}`;
-  throw new Error(`No Infura URL for chainId ${chainId}.`);
+  throw new Error(`No RPC URL for chainId ${chainId}.`);
+  */
 };
+
+function get_required_env_var(varname: string): string {
+  let varvalue = eval(`process.env.${varname}`);
+  if (!varvalue) {
+    let errmsg = `Please specify a required .env var '${varname}'.`;
+    console.error(errmsg);
+    throw errmsg;
+  }
+  return <string>varvalue;
+}
+
+
 
 export class Umbra {
   readonly chainConfig: ChainConfig;
@@ -154,9 +173,8 @@ export class Umbra {
     if (this.chainConfig.batchSendAddress) {
       this.batchSendContract = new Contract(this.chainConfig.batchSendAddress, UMBRA_BATCH_SEND_ABI, provider);
     }
-    this.fallbackProvider = new StaticJsonRpcProvider(
-      infuraUrl(this.chainConfig.chainId, String(process.env.INFURA_ID))
-    );
+    let KEY_VALUE : string = get_rpc_url_by_chain_id(parseInt(`${this.chainConfig.chainId}`));
+    this.fallbackProvider = new StaticJsonRpcProvider(KEY_VALUE);
   }
 
   // ==================================== CONTRACT INTERACTION =====================================

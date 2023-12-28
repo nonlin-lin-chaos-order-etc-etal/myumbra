@@ -222,9 +222,9 @@ the resulting `umbra-js/docs/index.html` file in your browser to view the docume
 
 ## Development
 
-1. Create a file in this directory called `.env` that looks like the one below.
+1. Create an empty file in this directory called `.env`.
    ```bash
-   INFURA_ID=yourInfuraId
+   touch .env
    ```
 2. Run `yarn` to install packages
 3. Run `yarn test` to run all tests.

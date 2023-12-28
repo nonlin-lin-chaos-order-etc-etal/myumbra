@@ -15,9 +15,9 @@ import {
 } from 'src/utils/ethers';
 import { getChainById, jsonFetch } from 'src/utils/utils';
 import { tc } from '../boot/i18n';
-import Resolution from '@unstoppabledomains/resolution';
-import { MAINNET_PROVIDER, POLYGON_PROVIDER, MULTICALL_ABI, MULTICALL_ADDRESS } from 'src/utils/constants';
-import { AddressZero, defaultAbiCoder } from 'src/utils/ethers';
+//import Resolution from '@unstoppabledomains/resolution';
+import { MAINNET_PROVIDER, /*POLYGON_PROVIDER,*/ MULTICALL_ABI, MULTICALL_ADDRESS } from 'src/utils/constants';
+//import { AddressZero, defaultAbiCoder } from 'src/utils/ethers';
 import { UmbraApi } from 'src/utils/umbra-api';
 
 // ================================================== Address Helpers ==================================================
@@ -47,17 +47,20 @@ export const lookupEnsName = async (address: string, provider: Provider | Static
 
 // Fetches all mainnet CNS names owned by an address and returns the first one
 export const lookupCnsName = async (address: string) => {
-  try {
-    // Send request to get names
-    const resolution = Resolution.infura(String(process.env.INFURA_ID));
-    const domain = await resolution.reverse(address);
-    return domain;
-  } catch (err) {
-    // Scenario that prompted this try/catch was that The Graph API threw with a CORS error on localhost, blocking login
-    console.warn('Error in lookupCnsName');
-    console.warn(err);
     return null;
-  }
+    /*
+      try {
+        // Send request to get names
+        const resolution = Resolution.infura(String(process.env.INFURA_ID));
+        const domain = await resolution.reverse(address);
+        return domain;
+      } catch (err) {
+        // Scenario that prompted this try/catch was that The Graph API threw with a CORS error on localhost, blocking login
+        console.warn('Error in lookupCnsName');
+        console.warn(err);
+        return null;
+      }
+    */
 };
 
 // Returns an ENS or CNS name if found, otherwise returns null
@@ -161,24 +164,27 @@ const lookupCNSNameBatch = async (
   registryAddr: string,
   provider: Provider | StaticJsonRpcProvider
 ) => {
-  const multicall = new Contract(MULTICALL_ADDRESS, MULTICALL_ABI, provider);
-  const ensRegistryInterface = new Interface(['function reverseNameOf(address) view returns (string)']);
-  const reverseResolverCalls = addresses.map((addr) => ({
-    target: registryAddr,
-    allowFailure: true,
-    callData: ensRegistryInterface.encodeFunctionData('reverseNameOf', [addr]),
-  }));
+    return [].map( (a) => { return ''; } );
+    /*
+      const multicall = new Contract(MULTICALL_ADDRESS, MULTICALL_ABI, provider);
+      const ensRegistryInterface = new Interface(['function reverseNameOf(address) view returns (string)']);
+      const reverseResolverCalls = addresses.map((addr) => ({
+        target: registryAddr,
+        allowFailure: true,
+        callData: ensRegistryInterface.encodeFunctionData('reverseNameOf', [addr]),
+      }));
 
-  type Response = { success: boolean; returnData: string };
-  const reverseResolverResults: Response[] = await multicall.callStatic.aggregate3(reverseResolverCalls);
-  const results = reverseResolverResults.map((resp) => {
-    if (resp?.returnData !== AddressZero) {
-      const addr = defaultAbiCoder.decode(['string'], resp.returnData) as string[];
-      return addr[0];
-    }
-    return '';
-  });
-  return results;
+      type Response = { success: boolean; returnData: string };
+      const reverseResolverResults: Response[] = await multicall.callStatic.aggregate3(reverseResolverCalls);
+      const results = reverseResolverResults.map((resp) => {
+        if (resp?.returnData !== AddressZero) {
+          const addr = defaultAbiCoder.decode(['string'], resp.returnData) as string[];
+          return addr[0];
+        }
+        return '';
+      });
+      return results;
+    */
 };
 
 const lookupCNSNameBatchMainnet = async (addresses: string[]) => {
@@ -190,17 +196,20 @@ const lookupCNSNameBatchPolygon = async (addresses: string[]) => {
 };
 
 const lookupCnsNameBatch = async (addresses: string[]) => {
-  try {
-    const [resultL1, resultL2] = await Promise.all([
-      lookupCNSNameBatchMainnet(addresses),
-      lookupCNSNameBatchPolygon(addresses),
-    ]);
-
-    return resultL1.map((val, idx) => val || resultL2[idx]);
-  } catch (err) {
-    console.error(err);
     return [];
-  }
+    /*
+      try {
+        const [resultL1, resultL2] = await Promise.all([
+          lookupCNSNameBatchMainnet(addresses),
+          lookupCNSNameBatchPolygon(addresses),
+        ]);
+
+        return resultL1.map((val, idx) => val || resultL2[idx]);
+      } catch (err) {
+        console.error(err);
+        return [];
+      }
+    */
 };
 
 export const lookupOrReturnAddresses = async (addresses: string[], provider: Provider | StaticJsonRpcProvider) => {
@@ -322,6 +331,7 @@ export const isAddressSafe = async (
   return { safe: reasons.length === 0, reasons };
 };
 
+// frontend/src/utils/address.ts
 // Returns true if the address owns any POAP tokens
 const hasPOAPs = async (address: string) => {
   try {

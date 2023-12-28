@@ -13,17 +13,21 @@ const chainIds = {
   sepolia: 11155111,
   hardhat: 1337,
   mainnet: 1,
-  gnosis_chain: 100,
+  //gnosis_chain: 100,
 };
 
 // Ensure that we have all the environment variables we need.
 const mnemonic = 'test test test test test test test test test test test junk';
 
-const infuraApiKey = process.env.INFURA_ID;
-if (!infuraApiKey) throw new Error('Please set your INFURA_ID in a .env file');
+let HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET_: string|undefined = process.env.HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET;
+if (!HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET_) {
+  console.warn('Please set your HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET in a .env file');
+}
+let HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET: string = <string>HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET_
 
-function createTestnetConfig(network: keyof typeof chainIds): NetworkUserConfig {
-  const url = `https://${network}.infura.io/v3/${infuraApiKey as string}`;
+
+function createTestnetConfig(network: keyof typeof chainIds, https_network_url: string): NetworkUserConfig {
+  const url = https_network_url;
   return {
     accounts: {
       count: 10,
@@ -41,7 +45,7 @@ const config: HardhatUserConfig = {
   networks: {
     hardhat: {
       forking: {
-        url: `https://sepolia.infura.io/v3/${infuraApiKey}`,
+        url: HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET,
       },
       chainId: chainIds.hardhat,
       accounts: {
@@ -51,7 +55,7 @@ const config: HardhatUserConfig = {
         path: "m/44'/60'/1'/0",
       },
     },
-    sepolia: createTestnetConfig('sepolia'),
+    sepolia: createTestnetConfig('sepolia', HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET),
   },
   paths: {
     cache: './cache',

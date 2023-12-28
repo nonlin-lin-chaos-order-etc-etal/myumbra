@@ -11,7 +11,7 @@ import '@nomiclabs/hardhat-waffle';
 import '@nomiclabs/hardhat-web3';
 import '@nomiclabs/hardhat-truffle5';
 import '@nomiclabs/hardhat-ethers';
-import '@nomiclabs/hardhat-etherscan';
+//import '@nomiclabs/hardhat-etherscan';
 import '@typechain/hardhat';
 import 'solidity-coverage';
 import 'hardhat-gas-reporter';
@@ -20,6 +20,7 @@ const chainIds = {
   ganache: 1337,
   hardhat: 1337,
   mainnet: 1,
+  bsc: 56,
   polygon: 137,
   arbitrum: 42161,
   optimism: 10,
@@ -38,24 +39,43 @@ if (!process.env.MNEMONIC) {
   mnemonic = process.env.MNEMONIC;
 }
 
-let infuraApiKey = '';
-if (!process.env.INFURA_ID) {
-  console.warn('Please set your INFURA_ID in a .env file');
-} else {
-  infuraApiKey = process.env.INFURA_ID;
+let HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET_: string|undefined = process.env.HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET;
+if (!HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET_) {
+  console.warn('Please set your HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET in a .env file');
+}
+let  HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET: string = <string>HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET_
+
+let HTTPS_ETH_RPC_PROVIDER_URL__ETH_MAINNET = process.env.HTTPS_ETH_RPC_PROVIDER_URL__ETH_MAINNET
+if (!HTTPS_ETH_RPC_PROVIDER_URL__ETH_MAINNET) {
+  console.warn('Please set your HTTPS_ETH_RPC_PROVIDER_URL__ETH_MAINNET in a .env file');
 }
 
-let etherscanApiKey = '';
+let HTTPS_ETH_RPC_PROVIDER_URL__BSC_MAINNET = process.env.HTTPS_ETH_RPC_PROVIDER_URL__BSC_MAINNET
+if (!HTTPS_ETH_RPC_PROVIDER_URL__BSC_MAINNET) {
+  console.warn('Please set your HTTPS_ETH_RPC_PROVIDER_URL__BSC_MAINNET in a .env file');
+}
+
+let HTTPS_ETH_RPC_PROVIDER_URL__ARBITRUM_MAINNET = process.env.HTTPS_ETH_RPC_PROVIDER_URL__ARBITRUM_MAINNET
+if (!HTTPS_ETH_RPC_PROVIDER_URL__ARBITRUM_MAINNET) {
+  console.warn('Please set your HTTPS_ETH_RPC_PROVIDER_URL__ARBITRUM_MAINNET in a .env file');
+}
+
+let HTTPS_ETH_RPC_PROVIDER_URL__OPTIMISM_MAINNET = process.env.HTTPS_ETH_RPC_PROVIDER_URL__OPTIMISM_MAINNET
+if (!HTTPS_ETH_RPC_PROVIDER_URL__OPTIMISM_MAINNET) {
+  console.warn('Please set your HTTPS_ETH_RPC_PROVIDER_URL__OPTIMISM_MAINNET in a .env file');
+}
+
+/*let etherscanApiKey = '';
 if (!process.env.ETHERSCAN_VERIFICATION_API_KEY) {
-  console.warn('Please set your ETHERSCAN_API_KEY in a .env file');
+  console.warn('Please set your ETHERSCAN_VERIFICATION_API_KEY in a .env file');
 } else {
   etherscanApiKey = process.env.ETHERSCAN_VERIFICATION_API_KEY;
 }
-
+*/
 const shouldReportGas = process.env.REPORT_GAS === 'true';
 
-function createTestnetConfig(network: keyof typeof chainIds): NetworkUserConfig {
-  const url = `https://${network}.infura.io/v3/${infuraApiKey}`;
+function createTestnetConfig(network: keyof typeof chainIds, https_network_url: string): NetworkUserConfig {
+  const url = https_network_url;
   return {
     accounts: {
       count: 10,
@@ -73,7 +93,7 @@ const config: HardhatUserConfig = {
   networks: {
     hardhat: {
       forking: {
-        url: `https://sepolia.infura.io/v3/${infuraApiKey}`,
+        url: HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET,
       },
       chainId: chainIds.hardhat,
       accounts: {
@@ -96,7 +116,7 @@ const config: HardhatUserConfig = {
       chainId: chainIds['sepolia'],
       url: 'http://127.0.0.1:8545',
     },
-    sepolia: createTestnetConfig('sepolia'),
+    sepolia: createTestnetConfig('sepolia', HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET),
     mainnet: {
       accounts: {
         count: 10,
@@ -105,9 +125,21 @@ const config: HardhatUserConfig = {
         path: "m/44'/60'/0'/0",
       },
       chainId: chainIds['mainnet'],
-      url: `https://mainnet.infura.io/v3/${infuraApiKey}`,
+      url: HTTPS_ETH_RPC_PROVIDER_URL__ETH_MAINNET,
       gasPrice: 60000000000, // 60 gwei
     },
+    bsc: {
+      accounts: {
+        count: 10,
+        initialIndex: 0,
+        mnemonic,
+        path: "m/44'/60'/0'/0",
+      },
+      chainId: chainIds['bsc'],
+      url: HTTPS_ETH_RPC_PROVIDER_URL__BSC_MAINNET,
+      gasPrice: 60000000000, // 60 gwei
+    },
+    /*
     polygon: {
       accounts: {
         count: 10,
@@ -119,6 +151,7 @@ const config: HardhatUserConfig = {
       url: 'https://polygon-rpc.com/',
       gasPrice: 33000000000, // 33 gwei
     },
+    */
     arbitrum: {
       accounts: {
         count: 10,
@@ -127,7 +160,7 @@ const config: HardhatUserConfig = {
         path: "m/44'/60'/0'/0",
       },
       chainId: chainIds['arbitrum'],
-      url: 'https://arb1.arbitrum.io/rpc',
+      url: HTTPS_ETH_RPC_PROVIDER_URL__ARBITRUM_MAINNET,
     },
     optimism: {
       accounts: {
@@ -137,8 +170,9 @@ const config: HardhatUserConfig = {
         path: "m/44'/60'/0'/0",
       },
       chainId: chainIds['optimism'],
-      url: 'https://mainnet.optimism.io',
+      url: HTTPS_ETH_RPC_PROVIDER_URL__OPTIMISM_MAINNET,
     },
+    /*
     gnosis_chain: {
       accounts: {
         count: 10,
@@ -149,6 +183,7 @@ const config: HardhatUserConfig = {
       chainId: chainIds['gnosis_chain'],
       url: 'https://rpc.ankr.com/gnosis',
     },
+    */
   },
   paths: {
     artifacts: './artifacts',
@@ -198,9 +233,9 @@ const config: HardhatUserConfig = {
     gasPrice: 200,
     excludeContracts: ['TestToken.sol', 'MockHook.sol', 'ERC20.sol'],
   },
-  etherscan: {
+  /*etherscan: {
     apiKey: etherscanApiKey,
-  },
+  },*/
 };
 
 export default config;

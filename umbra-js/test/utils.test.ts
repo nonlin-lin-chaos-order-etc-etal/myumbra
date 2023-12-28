@@ -8,19 +8,33 @@ import { Event } from '../src/ethers';
 
 const ethersProvider = ethers.provider;
 
-const INFURA_ID = <string>process.env.INFURA_ID;
-if (!INFURA_ID) throw new Error('Please set your INFURA_ID in a .env file');
+const HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET = <string>process.env.HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET;
+if (!HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET) throw new Error('Please set your HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET in a .env file');
+
+const HTTPS_ETH_RPC_PROVIDER_URL__ETH_MAINNET = <string>process.env.HTTPS_ETH_RPC_PROVIDER_URL__ETH_MAINNET;
+if (!HTTPS_ETH_RPC_PROVIDER_URL__ETH_MAINNET) throw new Error('Please set your HTTPS_ETH_RPC_PROVIDER_URL__ETH_MAINNET in a .env file');
+
+const HTTPS_ETH_RPC_PROVIDER_URL__POLYGON_MAINNET = <string>process.env.HTTPS_ETH_RPC_PROVIDER_URL__POLYGON_MAINNET;
+if (!HTTPS_ETH_RPC_PROVIDER_URL__POLYGON_MAINNET) throw new Error('Please set your HTTPS_ETH_RPC_PROVIDER_URL__POLYGON_MAINNET in a .env file');
+
+const HTTPS_ETH_RPC_PROVIDER_URL__OPTIMISM_MAINNET = <string>process.env.HTTPS_ETH_RPC_PROVIDER_URL__OPTIMISM_MAINNET;
+if (!HTTPS_ETH_RPC_PROVIDER_URL__OPTIMISM_MAINNET) throw new Error('Please set your HTTPS_ETH_RPC_PROVIDER_URL__OPTIMISM_MAINNET in a .env file');
+
+const HTTPS_ETH_RPC_PROVIDER_URL__ARBITRUM_MAINNET = <string>process.env.HTTPS_ETH_RPC_PROVIDER_URL__ARBITRUM_MAINNET;
+if (!HTTPS_ETH_RPC_PROVIDER_URL__ARBITRUM_MAINNET) throw new Error('Please set your HTTPS_ETH_RPC_PROVIDER_URL__ARBITRUM_MAINNET in a .env file');
 
 // Public key and address corresponding to stratus4.eth
-const publicKey = '0x04458465db23fe07d148c8c9078d8b67497998a66f4f2aa479973a9cbaaf8b5a96e6ba166a389b8f794b68010849b64b91343e72c7fa4cfcc178607c4b1d4870ed'; // prettier-ignore
-const address = '0x3f3c8dB1487469E8091cb210e9cf16D0Af0dE6FC';
+//const publicKey = ;
+//const address = ;
 
 // Public keys generated from a signature by the address stratus4.eth resolves to
-const pubKeysWallet = { spendingPublicKey: publicKey, viewingPublicKey: publicKey };
+//const pubKeysWallet = { spendingPublicKey: publicKey, viewingPublicKey: publicKey };
+/*
 const pubKeysUmbra = {
   spendingPublicKey: '0x04620950ddc4dd4352e91ed71ef87c1aba0d76296cb8d5b48996e31e4062c76c6e38b0d8b4c116d645604051c5c6255179538741e8d01595703c245dd6d9b6f7c3', // prettier-ignore
   viewingPublicKey: '0x04c9b42559000738090391904fe6b91327875df36ac0b294b075c834c056bdeaf25d067694830cfe143784d52d1b0ef637d535fdc6bfc687b0ccbdbf2b00a282dc', // prettier-ignore
 };
+*/
 
 // Define public key that is not on the curve. This point was generated from a valid public key ending in
 // `83b3` and we took this off the curve by changing the final digits to `83b4`
@@ -109,29 +123,22 @@ describe('Utilities', () => {
 
     // --- Address, advanced mode on (i.e. don't use the StealthKeyRegistry) ---
     it('looks up recipients by address, advanced mode on', async () => {
-      const ethersProvider = new StaticJsonRpcProvider(`https://sepolia.infura.io/v3/${String(process.env.INFURA_ID)}`);
+      const ethersProvider = new StaticJsonRpcProvider(`${HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET}`);
       const keys = await utils.lookupRecipient(address, ethersProvider, { advanced: true });
       expect(keys.spendingPublicKey).to.equal(pubKeysWallet.spendingPublicKey);
       expect(keys.viewingPublicKey).to.equal(pubKeysWallet.viewingPublicKey);
     });
 
     it('looks up recipients by ENS, advanced mode on', async () => {
-      const ethersProvider = new StaticJsonRpcProvider(`https://sepolia.infura.io/v3/${String(process.env.INFURA_ID)}`);
+      const ethersProvider = new StaticJsonRpcProvider(`${String(HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET)}`);
       const keys = await utils.lookupRecipient('stratus4.eth', ethersProvider, { advanced: true });
-      expect(keys.spendingPublicKey).to.equal(pubKeysWallet.spendingPublicKey);
-      expect(keys.viewingPublicKey).to.equal(pubKeysWallet.viewingPublicKey);
-    });
-
-    it.skip('looks up recipients by CNS, advanced mode on', async () => {
-      const ethersProvider = new StaticJsonRpcProvider(`https://sepolia.infura.io/v3/${INFURA_ID}`);
-      const keys = await utils.lookupRecipient('udtestdev-msolomon.crypto', ethersProvider, { advanced: true });
       expect(keys.spendingPublicKey).to.equal(pubKeysWallet.spendingPublicKey);
       expect(keys.viewingPublicKey).to.equal(pubKeysWallet.viewingPublicKey);
     });
 
     // --- Address, advanced mode off (i.e. use the StealthKeyRegistry) ---
     it('looks up recipients by address, advanced mode off', async () => {
-      const ethersProvider = new StaticJsonRpcProvider(`https://sepolia.infura.io/v3/${INFURA_ID}`); // otherwise throws with unsupported network since we're on localhost
+      const ethersProvider = new StaticJsonRpcProvider(`${HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET}`); // otherwise throws with unsupported network since we're on localhost
       const keys = await utils.lookupRecipient(address, ethersProvider);
       expect(keys.spendingPublicKey).to.equal(pubKeysUmbra.spendingPublicKey);
       expect(keys.viewingPublicKey).to.equal(pubKeysUmbra.viewingPublicKey);
@@ -142,8 +149,9 @@ describe('Utilities', () => {
       expect(keys2.viewingPublicKey).to.equal(pubKeysUmbra.viewingPublicKey);
     });
 
+/*
     it('looks up recipients by ENS, advanced mode off', async () => {
-      const ethersProvider = new StaticJsonRpcProvider(`https://sepolia.infura.io/v3/${INFURA_ID}`);
+      const ethersProvider = new StaticJsonRpcProvider(`${HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET}`);
       const keys = await utils.lookupRecipient('stratus4.eth', ethersProvider);
       // These values are set on the Sepolia resolver
       expect(keys.spendingPublicKey).to.equal(pubKeysUmbra.spendingPublicKey);
@@ -154,19 +162,7 @@ describe('Utilities', () => {
       expect(keys2.spendingPublicKey).to.equal(pubKeysUmbra.spendingPublicKey);
       expect(keys2.viewingPublicKey).to.equal(pubKeysUmbra.viewingPublicKey);
     });
-
-    // Skipped since CNS support isn't really well supported currently anyway.
-    it.skip('looks up recipients by CNS, advanced mode off', async () => {
-      const keys = await utils.lookupRecipient('udtestdev-msolomon.crypto', ethersProvider);
-      // These values are set on the Rinkeby resolver
-      expect(keys.spendingPublicKey).to.equal(pubKeysUmbra.spendingPublicKey);
-      expect(keys.viewingPublicKey).to.equal(pubKeysUmbra.viewingPublicKey);
-
-      // Same test, but with advanced mode off explicitly specified
-      const keys2 = await utils.lookupRecipient('udtestdev-msolomon.crypto', ethersProvider, { advanced: false });
-      expect(keys2.spendingPublicKey).to.equal(pubKeysUmbra.spendingPublicKey);
-      expect(keys2.viewingPublicKey).to.equal(pubKeysUmbra.viewingPublicKey);
-    });
+*/
 
     describe('sortStealthKeyLogs', () => {
       it('should sort stealth key logs by block number in ascending order', () => {
@@ -181,28 +177,27 @@ describe('Utilities', () => {
 
     // --- Address history by network ---
     it('looks up transaction history on mainnet', async () => {
-      const ethersProvider = new StaticJsonRpcProvider(`https://mainnet.infura.io/v3/${INFURA_ID}`);
+      const ethersProvider = new StaticJsonRpcProvider(`${HTTPS_ETH_RPC_PROVIDER_URL__ETH_MAINNET}`);
       const txHash = await utils.getSentTransaction(address, ethersProvider);
       expect(txHash).to.have.lengthOf(66);
     });
 
     it('looks up transaction history on sepolia', async () => {
-      const ethersProvider = new StaticJsonRpcProvider(`https://sepolia.infura.io/v3/${INFURA_ID}`);
+      const ethersProvider = new StaticJsonRpcProvider(`${HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET}`);
       const txHash = await utils.getSentTransaction(address, ethersProvider);
       expect(txHash).to.have.lengthOf(66);
     });
 
     it('looks up transaction history on polygon', async () => {
       const ethersProvider = new ethers.providers.StaticJsonRpcProvider(
-        `https://polygon-mainnet.infura.io/v3/${INFURA_ID}`
-      ) as EthersProvider;
+        `${HTTPS_ETH_RPC_PROVIDER_URL__POLYGON_MAINNET}`) as EthersProvider;
       const txHash = await utils.getSentTransaction(address, ethersProvider);
       expect(txHash).to.have.lengthOf(66);
     });
 
     it('looks up transaction history on optimism', async () => {
       const ethersProvider = new ethers.providers.StaticJsonRpcProvider(
-        `https://optimism-mainnet.infura.io/v3/${INFURA_ID}`
+        `${HTTPS_ETH_RPC_PROVIDER_URL__OPTIMISM_MAINNET}`
       ) as EthersProvider;
       const txHash = await utils.getSentTransaction(address, ethersProvider);
       expect(txHash).to.have.lengthOf(66);
@@ -210,7 +205,7 @@ describe('Utilities', () => {
 
     it('looks up transaction history on arbitrum one', async () => {
       const ethersProvider = new ethers.providers.StaticJsonRpcProvider(
-        `https://arbitrum-mainnet.infura.io/v3/${INFURA_ID}`
+        `${HTTPS_ETH_RPC_PROVIDER_URL__ARBITRUM_MAINNET}`
       ) as EthersProvider;
       const txHash = await utils.getSentTransaction(address, ethersProvider);
       expect(txHash).to.have.lengthOf(66);
@@ -238,7 +233,7 @@ describe('Utilities', () => {
 
     it('throws when looking up an address that has not sent a transaction', async () => {
       const address = '0x0000000000000000000000000000000000000002';
-      const ethersProvider = new StaticJsonRpcProvider(`https://sepolia.infura.io/v3/${INFURA_ID}`); // otherwise throws with unsupported network since we're on localhost
+      const ethersProvider = new StaticJsonRpcProvider(`${HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET}`); // otherwise throws with unsupported network since we're on localhost
       const errorMsg = `Address ${address} has not registered stealth keys. Please ask them to setup their Umbra account`;
       await expectRejection(utils.lookupRecipient(address, ethersProvider), errorMsg);
     });

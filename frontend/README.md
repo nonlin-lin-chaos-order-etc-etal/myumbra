@@ -10,10 +10,6 @@ Copy the `.env.example` to `.env` and populate it with your own configuration pa
 cp .env.example .env
 ```
 
-The required parameters are:
-
-`INFURA_ID` - A valid Infura App Identifier <br />
-`BLOCKNATIVE_API_KEY` - A Blocknative API key
 
 Optional parameters are:
 

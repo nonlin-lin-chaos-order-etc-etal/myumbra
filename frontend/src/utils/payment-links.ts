@@ -6,11 +6,22 @@ import { notifyUser } from 'src/utils/alerts';
 import { BigNumber, StaticJsonRpcProvider } from 'src/utils/ethers';
 import { UmbraApi } from 'src/utils/umbra-api';
 
+function get_required_env_var(varname: string): string {
+  let varvalue = eval(`process.env.${varname}`);
+  if (!varvalue) {
+    let errmsg = `Please specify a required .env var '${varname}'.`;
+    console.error(errmsg);
+    throw errmsg;
+  }
+  return <string>varvalue;
+}
+
+
 /**
- * @notice Returns a provider, falling back to a mainnet provider if user's wallet is not connected
+ * @notice Returns a provider, falling back to a ETH mainnet provider if user's wallet is not connected
  */
 function getProvider() {
-  return provider || new StaticJsonRpcProvider(`https://mainnet.infura.io/v3/${String(process.env.INFURA_ID)}`);
+  return provider || new StaticJsonRpcProvider(get_required_env_var("HTTPS_ETH_RPC_PROVIDER_URL__ETH_MAINNET"));
 }
 
 /**
