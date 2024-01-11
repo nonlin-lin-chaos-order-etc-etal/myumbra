@@ -1,6 +1,6 @@
 <template>
     <q-dialog v-model="isAddCustomTokenDialogVisible" @before-show="onBeforeShow" @before-hide="onBeforeHide">
-      <q-layout view="Lhh lpR fff" container class="q-my-sm" :style="isDark ? 'background-color: #121212' : ''">
+      <q-layout view="Lhh lpR fff" container class="q-my-sm" :style="isDark ? 'background-color: #121212' : 'background-color: white'">
         <q-header class="bg-primary">
           <q-toolbar>
             <q-toolbar-title>Add a custom token</q-toolbar-title>
