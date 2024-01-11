@@ -2,7 +2,7 @@ import { computed, onMounted, ref } from 'vue';
 import { Dark, LocalStorage } from 'quasar';
 import { isHexString } from 'src/utils/ethers';
 import { i18n } from '../boot/i18n';
-import { Language } from '../components/models';
+import { Language, TokenInfoExtended } from '../components/models';
 
 // Local storage key names
 const settings = {
@@ -11,10 +11,12 @@ const settings = {
   lastWallet: 'last-wallet',
   language: 'language',
   sendHistorySave: 'send-history-save',
+  customTokensList:  'custom-tokens-list',
 };
 
 // Shared state between instances
 const isDark = ref(false); // true if user has dark mode turned on
+const customTokens = ref<TokenInfoExtended[]>([]);
 const advancedMode = ref(false); // true if user has advanced mode turned on
 const sendHistorySave = ref(true); // true if user send history is saved, false if it is not
 const language = ref<Language>({ label: '', value: '' }); //language code
@@ -40,6 +42,7 @@ export default function useSettingsStore() {
     lastWallet.value = LocalStorage.getItem(settings.lastWallet)
       ? String(LocalStorage.getItem(settings.lastWallet))
       : undefined;
+    setCustomTokens(LocalStorage.getItem(settings.customTokensList));
   });
   setLanguage(
     paramLocale
@@ -54,6 +57,12 @@ export default function useSettingsStore() {
     // the dark mode status in Vue
     isDark.value = status;
     Dark.set(status);
+  }
+
+  function setCustomTokens(customTokens_: TokenInfoExtended[] | null) {
+    console.log('customTokens_:', customTokens_);
+    customTokens.value = customTokens_ || [];
+    LocalStorage.set(settings.customTokensList, customTokens.value);
   }
 
   function toggleDarkMode() {
@@ -127,9 +136,11 @@ export default function useSettingsStore() {
     setScanBlocks,
     setScanPrivateKey,
     setLastWallet,
+    setCustomTokens,
     resetScanSettings,
     supportedLanguages,
     isDark: computed(() => isDark.value),
+    customTokens: computed(() => customTokens.value),
     advancedMode: computed(() => advancedMode.value),
     sendHistorySave: computed(() => sendHistorySave.value),
     language: computed(() => language.value),

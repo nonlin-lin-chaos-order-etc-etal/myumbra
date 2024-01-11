@@ -3,7 +3,7 @@
  */
 import { randomBytes } from 'crypto';
 import { ethers } from 'ethers';
-import { RandomNumber } from '@umbracash/umbra-js';
+import { RandomNumber } from 'umbra-mod-umbra-js';
 
 import {
   buildAccountDataForEncryption,

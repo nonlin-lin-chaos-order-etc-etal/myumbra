@@ -27,7 +27,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, onMounted } from 'vue';
-import { KeyPair } from '@umbracash/umbra-js';
+import { KeyPair } from 'umbra-mod-umbra-js';
 
 import useWalletStore from 'src/store/wallet';
 import AccountSentTable from 'components/AccountSentTable.vue';

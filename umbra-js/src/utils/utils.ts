@@ -20,12 +20,12 @@ import {
   UnsignedTransaction,
 } from '../ethers';
 import { Point, Signature, utils as nobleUtils } from '@noble/secp256k1';
-import { ens, cns } from '..';
+//import { ens, cns } from '..';
 //import { default as Resolution } from '@unstoppabledomains/resolution';
 import { StealthKeyRegistry } from '../classes/StealthKeyRegistry';
 import { TxHistoryProvider } from '../classes/TxHistoryProvider';
 import { EthersProvider, TransactionResponseExtended } from '../types';
-//import { StealthKeyChangedEvent } from 'src/typechain/contracts/StealthKeyRegistry';
+import { StealthKeyChangedEvent } from 'src/typechain/contracts/StealthKeyRegistry';
 
 // Lengths of various properties when represented as full hex strings
 export const lengths = {
@@ -176,18 +176,18 @@ export async function getSentTransaction(address: string, ethersProvider: Ethers
 }
 
 // Takes an ENS, CNS, or address, and returns the checksummed address
-export async function toAddress(name: string, provider: EthersProvider) {
+export async function toAddress(name: string, _provider: EthersProvider) {
   // If the name is already an address, just return it.
   if (name.length === lengths.address && isHexString(name)) return getAddress(name);
 
   // First try ENS
-  let address: string | null = null;
-  address = await resolveEns(name, provider); // Will never throw, but returns null on failure
-  if (address) return address;
+  //let address: string | null = null;
+  //address = await resolveEns(name, provider); // Will never throw, but returns null on failure
+  //if (address) return address;
 
   // Then try CNS
-  address = await resolveCns(name); // Will never throw, but returns null on failure
-  if (address) return address;
+  //address = await resolveCns(name); // Will never throw, but returns null on failure
+  //if (address) return address;
 
   // At this point, we were unable to resolve the name to an address.
   throw new Error(
@@ -302,11 +302,12 @@ export function assertValidPrivateKey(key: string) {
  * @param name Name or domain to test
  * @param provider ethers provider instance
  */
-export async function getPublicKeysLegacy(name: string, provider: EthersProvider) {
+export async function getPublicKeysLegacy(name: string, _provider: EthersProvider) {
   if (!isDomain(name)) throw new Error(`Name ${name} is not a valid domain`);
   try {
     // First try ENS (throws on failure)
-    return ens.getPublicKeys(name, provider);
+    //return ens.getPublicKeys(name, provider);
+    throw new Error(`Name ${name} is not a valid domain because ENS is not supported`); // JFIX1
   } catch (e) {
     // Fallback to CNS
     throw new Error(`Name ${name} is not a valid domain because CNS is not supported`); // JFIX1
@@ -335,15 +336,14 @@ function getResolutionInstance() {
 }
 */
 
-/**
+/*
  * @notice Attempt to resolve an ENS name, and return null on failure
  * @param name Name to resolve
  * @param provider Provider connected to mainnet. If the provider is connected to a different
  * network, we use the umbra-js default provider instead
  * @returns
- */
-async function resolveEns(name: string, provider: EthersProvider) {
-  return null;/*
+ *
+async function resolveEns(_name: string, _provider: EthersProvider) {
   try {
     // Ensure we have a mainnet provider by using the provided provider if it's connected to mainnet,
     // and overriding with a mainnet provider otherwise. This ensures ENS resolution is always done
@@ -356,24 +356,23 @@ async function resolveEns(name: string, provider: EthersProvider) {
     return address || null;
   } catch (e) {
     return null;
-  }*/
+  }
 }
 
-/**
- * @notice Attempt to resolve a CNS name, and return null on failure
+* @notice Attempt to resolve a CNS name, and return null on failure
  * @param name
  * @returns
- */
-async function resolveCns(name: string) {
-  return null; // throw new Error(`Name ${name} is not a valid domain because CNS is not supported`); // JFIX2
-  /*try {
+ 
+async function _resolveCns(_name: string) {
+  try {
     const resolution = getResolutionInstance();
     const address = await resolution.addr(name, 'ETH');
     return getAddress(address) || null;
   } catch (e) {
     return null;
-  }*/
+  }
 }
+*/
 
 /**
  * @notice Given a from address, to address, and provider, return parameters needed to sweep all ETH
@@ -528,6 +527,8 @@ export async function assertSupportedAddress(recipientId: string) {
   if (!isSupported) throw new Error('Address is invalid or unavailable');
 }
 
+console.log(`HTTPS_ENS_RPC_MAINNET_PROVIDER_URL="${String(process.env.HTTPS_ENS_RPC_MAINNET_PROVIDER_URL)} (umbra-js/src/utils/utils.ts)"`)
+
 export async function checkSupportedAddresses(recipientIds: string[]) {
   // Check for public key being passed in, and if so derive the corresponding address.
   recipientIds = recipientIds.map((recipientId) => {
@@ -547,33 +548,6 @@ export async function checkSupportedAddresses(recipientIds: string[]) {
 
   // Initialize output, start by assuming all are supported.
   const isSupportedList = addresses.map((_) => true); // eslint-disable-line @typescript-eslint/no-unused-vars
-
-  // Now check the address against the hardcoded lists.
-  const bannedAddresses = [
-  ].map(getAddress);
-
-  const additionalBlockedAddresses = [
-  ].map(getAddress);
-
-  const invalidAddresses = new Set([...invalidStealthAddresses, ...bannedAddresses, ...additionalBlockedAddresses]);
-  addresses.forEach((address, i) => {
-    if (invalidAddresses.has(getAddress(address))) {
-      isSupportedList[i] = false;
-    }
-  });
-
-  // Next we check against the Chainalysis contract.
-  // TODO Because announcements come in batches, we hit RPC limits if we try querying the contract
-  // for all addresses in all announcements, even with a multicall. As a result, the above lists are
-  // up to date, so we only do this check if there is a single recipient. Later, we should use a
-  // subgraph or similar to get the list of sanctioned addresses to compare against.
-  if (recipientIds.length === 1) {
-    //const abi = ['function isSanctioned(address addr) external view returns (bool)'];
-    //const contract = new Contract('0x40C57923924B5c5c5455c48D93317139ADDaC8fb', abi, provider);
-    //if (await contract.isSanctioned(addresses[0])) {
-    //  isSupportedList[0] = false;
-    //}
-  }
 
   return isSupportedList;
 }

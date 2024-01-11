@@ -12,6 +12,7 @@ module.exports = {
     process: true,
     Capacitor: true,
     chrome: true,
+    env: true,
   },
   rules: {
     '@typescript-eslint/ban-ts-comment': 'warn',

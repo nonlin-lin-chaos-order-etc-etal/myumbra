@@ -10,6 +10,10 @@
 const { configure } = require('quasar/wrappers');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const path = require('path');
+const DotEnv = require('dotenv')
+const webpack = require('webpack')
+const envparser = require('./config/envparser')
+
 
 module.exports = configure(function (ctx) {
   return {
@@ -50,6 +54,27 @@ module.exports = configure(function (ctx) {
 
     // Full list of options: https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-build
     build: {
+      env: envparser(),
+      extendWebpack: (cfg) => {
+
+        cfg.module.rules.push({
+          enforce: 'pre',
+          test: /\.(js|vue)$/,
+          loader: 'eslint-loader',
+          exclude: /(node_modules|quasar)/
+        });
+
+        // Create an alias for our helper
+        cfg.resolve.alias.env = path.resolve(__dirname, './config/helpers/env.js');
+
+        // Make our helper function Global
+        cfg.plugins.push(
+          new webpack.ProvidePlugin({
+            'env': 'env' // this variable is our alias, it's not a string
+          })
+        );
+      },
+
       vueRouterMode: 'history', // available values: 'hash', 'history'
 
       // transpile: false,

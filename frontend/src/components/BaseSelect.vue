@@ -22,7 +22,7 @@
       :rules="[(val) => rules(val)]"
       @blur="hideHint"
       @focus="showHint"
-      @update:modelValue="handleInput"
+      @update:modelValue="() => { handleInput(); updateTokenSelectValue(toRaw(content)); }"
     >
       <!-- Show icons when selected or when the slot is provided-->
       <template v-slot:prepend v-if="content && content.logoURI">
@@ -34,7 +34,7 @@
 
       <!-- Show icons in dropdown list -->
       <template v-slot:option="scope">
-        <q-item v-bind="scope.itemProps" v-on="scope.itemProps">
+        <q-item v-bind="scope.itemProps" v-on="scope.itemProps" v-if="scope.opt.address">
           <q-item-section avatar v-if="scope.opt.logoURI">
             <img class="horizontal-center" :src="scope.opt.logoURI" style="height: 1.5rem" />
           </q-item-section>
@@ -47,18 +47,78 @@
             </q-item-label>
           </q-item-section>
         </q-item>
+        <q-item v-bind="scope.itemProps" v-on="scope.itemProps" v-else>
+          <q-item-section>
+            <q-item-label>{{ $t('BaseSelect.addToken') }}</q-item-label>
+          </q-item-section>
+        </q-item>
       </template>
     </q-select>
+    <add-custom-token-modal
+        isAddCustomTokenDialogVisible="isTokenAdd"
+        class="q-pa-lg" 
+    />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, watch, ref, computed, toRaw } from 'vue';
+import { tc } from 'src/boot/i18n';
 import { humanizeTokenAmount } from 'src/utils/utils';
+import AddCustomTokenModal from 'src/components/AddCustomTokenModal.vue';
+import { isAddCustomTokenDialogVisible/*, tokenAddress, tokenSymbol, decimals, hidden, submittedOK*/ } from 'components/AddCustomTokenModal.vue';
+import { TokenInfoExtended } from 'src/components/models';
+
+
+interface IAddCustomTokenCommand {
+  add: boolean;
+}
+
+export class AddCustomTokenCommand implements IAddCustomTokenCommand {
+  add: boolean;
+  symbol: string;
+  constructor() {
+    this.add = true;
+    this.symbol = tc('BaseSelect.addToken');
+  }
+}
+
+const unconvertedToken  = ref<unknown|null>(null);
+
+export const isTokenAdd = computed(() => unconvertedToken.value instanceof AddCustomTokenCommand ? unconvertedToken.value.add : <boolean>false);
 
 export default defineComponent({
   name: 'BaseSelect',
+  
+  components: { AddCustomTokenModal }, // prettier-ignore
 
+  setup() {
+
+    const updateTokenSelectValue = (value: AddCustomTokenCommand | TokenInfoExtended) => {
+        if(value instanceof AddCustomTokenCommand)console.log('add custom token triggered, value.add:', value.add);
+        else console.log('known token triggered, value:', value);
+        unconvertedToken.value = value;
+    }
+
+    const addCustomTokenModalShown = computed(() => isTokenAdd.value);
+    console.log('addCustomTokenModalShown.value:', addCustomTokenModalShown.value)
+    //const addCustomTokenModal = computed<boolean>(() => addCustomTokenModalShown.value);
+
+    watch(isTokenAdd, (newTokenAdd, oldTokenAdd) => {
+      if (newTokenAdd && (newTokenAdd != oldTokenAdd)) {
+        console.log('BaseSelect: newTokenAdd:', newTokenAdd);
+        isAddCustomTokenDialogVisible.value  = true;
+      }else 
+        console.log('BaseSelect: newTokenAdd is false or old');
+    });
+    
+    return {
+        isTokenAdd,
+        unconvertedToken,
+        updateTokenSelectValue,
+        toRaw
+    }
+  },
   props: {
     dense: {
       type: Boolean,

@@ -1,4 +1,7 @@
 {
+  "BaseSelect": {
+    "addToken": "Add a custom token"
+  },
   "Home": {
     "header": "发送隐形付款",
     "description": "只有汇款人和收款人知道谁收到了资金",

@@ -1,19 +1,19 @@
 import { copyToClipboard } from 'quasar';
 import { TokenInfoExtended } from 'components/models';
-import { utils as umbraUtils } from '@umbracash/umbra-js';
+import { utils as umbraUtils } from 'umbra-mod-umbra-js';
 import { providerExport as provider, relayerExport as relayer, tokensExport as tokens } from 'src/store/wallet';
 import { notifyUser } from 'src/utils/alerts';
 import { BigNumber, StaticJsonRpcProvider } from 'src/utils/ethers';
 import { UmbraApi } from 'src/utils/umbra-api';
 
 function get_required_env_var(varname: string): string {
-  let varvalue = eval(`process.env.${varname}`);
+  const varvalue = process.env[varname];
   if (!varvalue) {
-    let errmsg = `Please specify a required .env var '${varname}'.`;
+    const errmsg = `Please specify a required .env var '${varname}'.`;
     console.error(errmsg);
     throw errmsg;
   }
-  return <string>varvalue;
+  return varvalue;
 }
 
 
@@ -21,7 +21,7 @@ function get_required_env_var(varname: string): string {
  * @notice Returns a provider, falling back to a ETH mainnet provider if user's wallet is not connected
  */
 function getProvider() {
-  return provider || new StaticJsonRpcProvider(get_required_env_var("HTTPS_ETH_RPC_PROVIDER_URL__ETH_MAINNET"));
+  return provider || new StaticJsonRpcProvider(get_required_env_var('HTTPS_ETH_RPC_PROVIDER_URL__ETH_MAINNET'));
 }
 
 /**

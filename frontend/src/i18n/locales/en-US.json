@@ -1,4 +1,7 @@
 {
+  "BaseSelect": {
+    "addToken": "Add a custom token"
+  },
   "Home": {
     "header": "Send Stealth Payments",
     "description": "Only the sender and recipient know who received funds",

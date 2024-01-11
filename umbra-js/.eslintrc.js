@@ -4,4 +4,7 @@ module.exports = {
     project: 'tsconfig.json',
     parser: '@typescript-eslint/parser',
   },
+  globals: {
+    env: true,
+  }
 };

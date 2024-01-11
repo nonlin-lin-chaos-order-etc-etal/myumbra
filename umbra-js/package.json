@@ -1,5 +1,5 @@
 {
-  "name": "@umbracash/umbra-js",
+  "name": "umbra-mod-umbra-js",
   "version": "0.1.4",
   "description": "Send and receive stealth payments",
   "main": "build/src/index.js",
@@ -26,6 +26,7 @@
   "dependencies": {
     "@noble/secp256k1": "^1.7.1",
     "@unstoppabledomains/resolution": "8.5.0",
+    "dotenv": "^16.3.1",
     "ethers": "5.7.2"
   },
   "devDependencies": {
@@ -34,7 +35,6 @@
     "@types/bn.js": "^5.1.0",
     "@types/chai": "^4.2.16",
     "@types/mocha": "^8.2.2",
-    "@umbra/contracts-core": "^0.0.2",
     "chai": "^4.3.4",
     "dotenv": "^8.2.0",
     "eslint-config-prettier": "^8.2.0",

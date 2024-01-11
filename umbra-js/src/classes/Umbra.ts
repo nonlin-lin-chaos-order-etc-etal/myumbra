@@ -118,37 +118,24 @@ const isEth = (token: string) => {
   return getAddress(token) === ETH_ADDRESS; // throws if `token` is not a valid address
 };
 
-const get_rpc_url_by_chain_id = (chainid: number): string => {
-  const KEY_NAME=`HTTPS_ETH_RPC_PROVIDER_URL__CHAINID_${String( BigNumber.from(this.chainConfig.chainId).toNumber()) }`;
-  return get_required_env_var(KEY_NAME);
+const get_rpc_url_by_chain_id = (chainId: number): string => {
+  // For Hardhat, we just use the mainnet chain ID to avoid errors in tests, but this doesn't affect anything.
+  if (chainId === 1 || chainId === 1337) return String(process.env.HTTPS_ETH_RPC_PROVIDER_URL__ETH_MAINNET);
+  if (chainId === 10) return String(process.env.HTTPS_ETH_RPC_PROVIDER_URL__OPTIMISM_MAINNET);
+  if (chainId === 11155111) return String(process.env.HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET);
+  if (chainId === 42161) return String(process.env.HTTPS_ETH_RPC_PROVIDER_URL__ARBITRUM_MAINNET);
+  if (chainId === 56) return String(process.env.HTTPS_ETH_RPC_PROVIDER_URL__BSC_MAINNET);
+
+  throw new Error(`No RPC URL for chainId ${chainId}.`);
 }
-/**
+/*
  * @notice Returns the Infura RPC URL for the provided chainId and Infura ID
- */
+ *
 const infuraUrl = (chainId: BigNumberish, infuraId: string) => {
   chainId = BigNumber.from(chainId).toNumber();
-  // For Hardhat, we just use the mainnet chain ID to avoid errors in tests, but this doesn't affect anything.
   return get_rpc_url_by_chain_id(chainId);
-  /*
-  if (chainId === 1 || chainId === 1337) return `https://mainnet.infura.io/v3/${infuraId}`;
-  if (chainId === 10) return `https://optimism-mainnet.infura.io/v3/${infuraId}`;
-  if (chainId === 100) return 'https://rpc.ankr.com/gnosis';
-  if (chainId === 137) return `https://polygon-mainnet.infura.io/v3/${infuraId}`;
-  if (chainId === 42161) return `https://arbitrum-mainnet.infura.io/v3/${infuraId}`;
-  if (chainId === 11155111) return `https://sepolia.infura.io/v3/${infuraId}`;
-  throw new Error(`No RPC URL for chainId ${chainId}.`);
-  */
 };
-
-function get_required_env_var(varname: string): string {
-  let varvalue = eval(`process.env.${varname}`);
-  if (!varvalue) {
-    let errmsg = `Please specify a required .env var '${varname}'.`;
-    console.error(errmsg);
-    throw errmsg;
-  }
-  return <string>varvalue;
-}
+*/
 
 
 

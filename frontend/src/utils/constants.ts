@@ -1,17 +1,9 @@
 import { StaticJsonRpcProvider } from 'src/utils/ethers';
 
+import { get_required_env_var } from 'src/utils/env'
 
-function get_required_env_var(varname: string): string {
-  let varvalue = eval(`process.env.${varname}`);
-  if (!varvalue) {
-    let errmsg = `Please specify a required .env var '${varname}'.`;
-    console.error(errmsg);
-    throw errmsg;
-  }
-  return <string>varvalue;
-}
-
-export const MAINNET_RPC_URL = get_required_env_var("MAINNET_RPC_URL");
+export const MAINNET_RPC_URL = String(process.env.MAINNET_RPC_URL);
+get_required_env_var('MAINNET_RPC_URL', MAINNET_RPC_URL)
 export const MAINNET_PROVIDER = new StaticJsonRpcProvider(MAINNET_RPC_URL);
 //export const POLYGON_RPC_URL = String(process.env.POLYGON_RPC_URL);
 //export const POLYGON_PROVIDER = new StaticJsonRpcProvider(POLYGON_RPC_URL);

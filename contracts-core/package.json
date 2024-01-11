@@ -1,9 +1,10 @@
 {
-  "name": "@umbra/contracts-core",
+  "name": "umbra-mod-contracts-core",
   "version": "0.0.2",
   "description": "Contracts for the Umbra Protocol",
   "dependencies": {
-    "@openzeppelin/contracts": "3.4.1"
+    "@openzeppelin/contracts": "3.4.1",
+    "@umbra-mod/umbra-mod-umbra-js": "./umbra-js"
   },
   "devDependencies": {
     "@commitlint/cli": "^9.1.2",

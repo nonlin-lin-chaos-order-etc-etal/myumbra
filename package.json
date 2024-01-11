@@ -1,8 +1,8 @@
 {
-  "name": "umbra",
+  "name": "umbra-mod",
   "version": "0.0.1",
   "description": "Send and receive stealth payments with the Umbra protocol",
-  "author": "mds <17163988+mds1@users.noreply.github.com>",
+  "author": "mds <17163988+mds1@users.noreply.github.com>, hypnosis",
   "private": true,
   "workspaces": {
     "packages": [

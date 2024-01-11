@@ -147,11 +147,11 @@
           <!-- Token -->
           <div class="q-pt-sm">{{ $t('Send.select-token') }}</div>
           <base-select
-            v-model="token"
+            v-model="unconvertedToken"
             :disable="isSending"
             filled
             :label="$t('Send.token')"
-            :options="tokenList"
+            :options="tokensExt"
             option-label="symbol"
             ref="tokenBaseSelectRef"
             :token-balances="balances"
@@ -325,7 +325,7 @@
                       v-model="Send.token"
                       :disable="isSending"
                       filled
-                      :options="tokenList"
+                      :options="tokensExt"
                       option-label="symbol"
                       ref="tokenBaseSelectRef"
                       :token-balances="balances"
@@ -376,7 +376,7 @@
                     :disable="isSending"
                     filled
                     :label="$t('Send.token')"
-                    :options="tokenList"
+                    :options="tokensExt"
                     option-label="symbol"
                     ref="tokenBaseSelectRef"
                     :token-balances="balances"
@@ -485,7 +485,7 @@
 // --- External imports ---
 import { computed, defineComponent, onMounted, ref, watch } from 'vue';
 import { QForm, QInput, QSelect } from 'quasar';
-import { RandomNumber, utils as umbraUtils } from '@umbracash/umbra-js';
+import { RandomNumber, utils as umbraUtils } from 'umbra-mod-umbra-js';
 // --- Components ---
 import BaseInput from 'components/BaseInput.vue';
 import BaseSelect from 'components/BaseSelect.vue';
@@ -510,12 +510,13 @@ import {
 } from 'src/utils/ethers';
 import { humanizeTokenAmount, humanizeMinSendAmount, humanizeArithmeticResult } from 'src/utils/utils';
 import { generatePaymentLink, parsePaymentLink } from 'src/utils/payment-links';
-import { SendBatch } from '@umbracash/umbra-js';
+import { SendBatch } from 'umbra-mod-umbra-js';
 import { Provider, TokenInfoExtended, supportedChains } from 'components/models';
 import { ERC20_ABI } from 'src/utils/constants';
 import { toAddress } from 'src/utils/address';
 import { storeSend, StoreSendArgs } from 'src/utils/account-send';
 import { assertValidEnsName } from 'src/utils/validation';
+import { AddCustomTokenCommand } from 'src/components/BaseSelect.vue'
 
 interface BatchSendData {
   id: number;
@@ -525,7 +526,7 @@ interface BatchSendData {
 }
 
 function useSendForm() {
-  const { advancedMode, isDark, sendHistorySave } = useSettingsStore();
+  const { advancedMode, isDark, sendHistorySave, customTokens } = useSettingsStore();
   const {
     balances,
     chainId,
@@ -542,6 +543,27 @@ function useSendForm() {
     userAddress,
     viewingKeyPair,
   } = useWalletStore();
+  
+  const tokensExt = computed(() : Array<TokenInfoExtended | AddCustomTokenCommand> => {
+      console.log('tokenList', tokenList);
+      console.log('tokenList.value', tokenList.value);
+      console.log('customTokens', customTokens.value, 'typeof customTokens:', typeof customTokens);
+      const tlv : Array<TokenInfoExtended | AddCustomTokenCommand> = [];
+      for (var a of tokenList.value) {
+        tlv.push(a);
+        console.log(a);
+      }
+      if(customTokens.value){
+          for (var b of customTokens.value) {
+            tlv.push(b);
+            console.log(b);
+          }
+      }
+      tlv.push(new AddCustomTokenCommand());
+      const tokenListExt : Array<TokenInfoExtended | AddCustomTokenCommand> = tlv;
+      console.log('tokenListExt', tokenListExt)
+      return tokenListExt;
+  });
 
   // Helpers
   const sendFormRef = ref<QForm>();
@@ -559,7 +581,8 @@ function useSendForm() {
   const recipientId = ref<string>();
   const recipientIdWarning = ref<string>();
   const useNormalPubKey = ref(false);
-  const token = ref<TokenInfoExtended>();
+  const unconvertedToken = ref<TokenInfoExtended|AddCustomTokenCommand>();
+  const token = computed<TokenInfoExtended|null>(() => (unconvertedToken.value && !(unconvertedToken.value instanceof AddCustomTokenCommand)) ? <TokenInfoExtended>unconvertedToken.value : null)
   const humanAmount = ref<string>();
   const isValidForm = ref(false);
   const isValidBatchSendForm = ref(false);
@@ -573,7 +596,7 @@ function useSendForm() {
   // Batch Send Form Parameters
   const batchSends = ref<BatchSendData[]>([]);
   const tab = ref('send');
-  const batchSendSupportedChains = [1, 10, 100, 137, 42161, 11155111];
+  const batchSendSupportedChains = [1, 10, 42161, 11155111, 56];
   const batchSendIsSupported = ref(false);
 
   // Computed form parameters.
@@ -766,8 +789,8 @@ function useSendForm() {
     if (amount) humanAmount.value = amount;
 
     // For token, we always default to the chain's native token if none was selected
-    if (paymentToken?.symbol) token.value = paymentToken;
-    else token.value = tokenList.value[0];
+    if (paymentToken?.symbol) unconvertedToken.value = paymentToken;
+    else unconvertedToken.value = tokenList.value[0];
 
     // Validate the form
     await sendFormRef.value?.validate();
@@ -1150,7 +1173,7 @@ function useSendForm() {
   }
 
   function resetForm() {
-    token.value = NATIVE_TOKEN.value;
+    unconvertedToken.value = NATIVE_TOKEN.value;
     recipientId.value = undefined;
     humanAmount.value = undefined;
     sendFormRef.value?.resetValidation();
@@ -1221,6 +1244,8 @@ function useSendForm() {
   }
 
   return {
+    unconvertedToken,
+    
     acknowledgeSendRisk,
     addFields,
     advancedAcknowledged,
@@ -1270,6 +1295,7 @@ function useSendForm() {
     toll,
     useNormalPubKey,
     userAddress,
+    tokensExt,
   };
 }
 

@@ -304,6 +304,7 @@ export default defineComponent({
   setup() {
     const {
       advancedMode,
+      customTokens,
       sendHistorySave,
       isDark,
       language,
@@ -324,6 +325,7 @@ export default defineComponent({
       userDisplayName,
       setLanguage: setWalletLanguage,
     } = useWalletStore();
+    
 
     const currentLanguage = ref({ label: language.value.label, value: language.value.value });
     const argentModalDismissed = ref(false);
@@ -337,6 +339,7 @@ export default defineComponent({
     return {
       advancedMode,
       argentModalDismissed,
+      customTokens,
       avatar,
       currentLanguage,
       drawerRight: ref(false),

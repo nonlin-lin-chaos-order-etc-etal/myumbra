@@ -4185,6 +4185,14 @@
     dotenv-parse-variables "^2.0.0"
     fs "^0.0.2"
 
+"@quasar/quasar-app-extension-qenv@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@quasar/quasar-app-extension-qenv/-/quasar-app-extension-qenv-1.1.0.tgz#e636a428bb324069b64ddabe67d7c99400ebaf64"
+  integrity sha512-4VP27GHNXSTIGMCqOLTyos487CsKacUKmTNs6B1rHN15FiiU0ore08WGuIy89d7qG4IJrO/OHkgrbso9UhyJuw==
+  dependencies:
+    fs-extra "^9.1.0"
+    semver "^7.3.4"
+
 "@quasar/ssr-helpers@2.2.0":
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/@quasar/ssr-helpers/-/ssr-helpers-2.2.0.tgz#33ee22a8fb0d24b53c48485d7916f733f0c2ef7a"
@@ -5546,6 +5554,13 @@
   dependencies:
     "@typescript-eslint/types" "5.46.1"
     eslint-visitor-keys "^3.3.0"
+
+"@umbra-mod/umbra-mod-umbra-js@./umbra-js":
+  version "0.1.4"
+  dependencies:
+    "@noble/secp256k1" "^1.7.1"
+    "@unstoppabledomains/resolution" "8.5.0"
+    ethers "5.7.2"
 
 "@ungap/promise-all-settled@1.1.2":
   version "1.1.2"
@@ -10431,6 +10446,11 @@ dotenv-parse-variables@^2.0.0:
   dependencies:
     debug "^4.3.1"
     is-string-and-not-blank "^0.0.2"
+
+dotenv@^16.3.1:
+  version "16.3.1"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-16.3.1.tgz#369034de7d7e5b120972693352a3bf112172cc3e"
+  integrity sha512-IPzF4w4/Rd94bA9imS68tZBaYyBWSCE47V1RGuMrB94iyTOIEwRmVL2x/4An+6mETpLrKJ5hQkB8W4kFAadeIQ==
 
 dotenv@^8.1.0, dotenv@^8.2.0:
   version "8.6.0"
@@ -23943,10 +23963,20 @@ xtend@~2.1.1:
   dependencies:
     object-keys "~0.4.0"
 
-y18n@^3.2.1, y18n@^4.0.0, y18n@^4.0.1, y18n@^5.0.5:
+y18n@^3.2.1:
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/y18n/-/y18n-3.2.2.tgz#85c901bd6470ce71fc4bb723ad209b70f7f28696"
+  integrity sha512-uGZHXkHnhF0XeeAPgnKfPv1bgKAYyVvmNL1xlKsPYZPaIHxGti2hHqvOCQv71XMsLxu1QjergkqogUnms5D3YQ==
+
+y18n@^4.0.0:
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/y18n/-/y18n-4.0.3.tgz#b5f259c82cd6e336921efd7bfd8bf560de9eeedf"
   integrity sha512-JKhqTOwSrqNA1NY5lSztJ1GrBiUodLMmIZuLiDaMRJ+itFd+ABVE8XBjOvIWL+rSqNDC74LCSFmlb/U4UZ4hJQ==
+
+y18n@^5.0.5:
+  version "5.0.8"
+  resolved "https://registry.yarnpkg.com/y18n/-/y18n-5.0.8.tgz#7f4934d0f7ca8c56f95314939ddcd2dd91ce1d55"
+  integrity sha512-0pfFzegeDWJHJIAmTLRP2DwHjdF5s7jo9tuztdQxAhINCdvS+3nGINqPd00AphqJR/0LhANUS6/+7SCb98YOfA==
 
 yaeti@^0.0.6:
   version "0.0.6"

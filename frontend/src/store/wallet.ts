@@ -5,7 +5,7 @@ import injectedModule from '@web3-onboard/injected-wallets';
 import walletConnectModule from '@web3-onboard/walletconnect';
 import coinbaseWalletModule from '@web3-onboard/coinbase';
 import trezorModule from '@web3-onboard/trezor';
-import { KeyPair, StealthKeyRegistry, utils, Umbra } from '@umbracash/umbra-js';
+import { KeyPair, StealthKeyRegistry, utils, Umbra } from 'umbra-mod-umbra-js';
 import {
   Chain,
   MulticallResponse,
@@ -17,8 +17,8 @@ import {
   supportedChainIds,
   TokenInfoExtended,
 } from 'components/models';
-import { formatNameOrAddress, lookupEnsName, lookupCnsName } from 'src/utils/address';
-import { ERC20_ABI, MAINNET_PROVIDER, MULTICALL_ABI, MULTICALL_ADDRESS } from 'src/utils/constants';
+import { formatNameOrAddress } from 'src/utils/address';
+import { ERC20_ABI, MULTICALL_ABI, MULTICALL_ADDRESS } from 'src/utils/constants';
 import { BigNumber, Contract, ExternalProvider, Web3Provider, parseUnits } from 'src/utils/ethers';
 import { UmbraApi } from 'src/utils/umbra-api';
 import { getChainById } from 'src/utils/utils';
@@ -310,40 +310,22 @@ export default function useWalletStore() {
       const detector = new Contract(argentDetector.address, argentDetector.abi, provider.value);
 
       // Get ENS name, CNS name, and check if user has registered their stealth keys
-      const [_userEns, _userCns, _stealthKeys, _isArgent] = await Promise.all([
-        lookupEnsName(_userAddress, MAINNET_PROVIDER as Web3Provider),
-        lookupCnsName(_userAddress),
+      const [_stealthKeys, _isArgent] = await Promise.all([
         getRegisteredStealthKeys(_userAddress, provider.value),
         [1, 3].includes(newChainId) ? detector.isArgentWallet(_userAddress) : false, // Argent is only on Mainnet and Ropsten
       ]);
       const _isAccountSetup = _stealthKeys !== null;
-
-      if (typeof _userEns === 'string') {
-        // ENS address must exist.
-        // We don't await this because IPFS avatars can be slow to load and we don't want to block on this.
-        MAINNET_PROVIDER.getAvatar(_userEns)
-          .then((res) => (avatar.value = res))
-          .catch((e) => window.logger.warn(e));
-      }
-
-      // Check if user has legacy keys setup with their ENS or CNS names (if so, we hide Account Setup)
-      const [_hasEnsKeys, _hasCnsKeys] = _isAccountSetup
-        ? [false, false]
-        : await Promise.all([
-            Boolean(_userEns) && (await hasSetPublicKeysLegacy(_userEns as string, MAINNET_PROVIDER as Web3Provider)),
-            Boolean(_userCns) && (await hasSetPublicKeysLegacy(_userCns as string, MAINNET_PROVIDER as Web3Provider)),
-          ]);
 
       // Now we save the user's info to the store. We don't do this earlier because the UI is reactive based on these
       // parameters, and we want to ensure this method completed successfully before updating the UI
       relayer.value = _relayer;
       relayerExport = relayer.value;
       userAddress.value = _userAddress;
-      userEns.value = _userEns;
-      userCns.value = _userCns;
+      userEns.value = null;
+      userCns.value = null;
       network.value = _network;
-      hasEnsKeys.value = _hasEnsKeys; // LEGACY
-      hasCnsKeys.value = _hasCnsKeys; // LEGACY
+      hasEnsKeys.value = false; // LEGACY
+      hasCnsKeys.value = false; // LEGACY
       isAccountSetup.value = _isAccountSetup;
       isArgent.value = _isArgent;
       stealthKeys.value = _isAccountSetup ? _stealthKeys : null;
@@ -600,6 +582,7 @@ export default function useWalletStore() {
   };
 }
 
+/*
 // Helper method to check if user has ENS or CNS keys // LEGACY
 const hasSetPublicKeysLegacy = async (name: string, provider: Provider) => {
   try {
@@ -610,6 +593,7 @@ const hasSetPublicKeysLegacy = async (name: string, provider: Provider) => {
     return false;
   }
 };
+*/
 
 // Helper method to check if user has registered public keys in the StealthKeyRegistry
 async function getRegisteredStealthKeys(account: string, provider: Provider) {

@@ -2,23 +2,6 @@ import { BigNumber, BigNumberish, EtherscanProvider } from '../ethers';
 
 let _isCommunityResource = false;
 
-function get_required_env_var(varname: string): string {
-  let varvalue = eval(`process.env.${varname}`);
-  if (!varvalue) {
-    let errmsg = `Please specify a required .env var '${varname}'.`;
-    console.error(errmsg);
-    throw errmsg;
-  }
-  return <string>varvalue;
-}
-
-//check the env
-get_required_env_var("ETHSCANAPI_HTTPS_URL_MAINNET");
-get_required_env_var("ETHSCANAPI_OPTIMISTIC_HTTPS_URL_MAINNET");
-get_required_env_var("ETHSCANAPI_ARBITRUM_HTTPS_URL_MAINNET");
-get_required_env_var("ETHSCANAPI_SEPOLIA_HTTPS_URL_TESTNET");
-get_required_env_var("ETHSCANAPI_BSC_HTTPS_URL_MAINNET");
-
 export class TxHistoryProvider extends EtherscanProvider {
   constructor(chainId: BigNumberish, apiKey?: string) {
     const _chainId = BigNumber.from(chainId).toNumber();
@@ -64,29 +47,6 @@ export class TxHistoryProvider extends EtherscanProvider {
     }
 
     super(_chainId, apiKey || defaultApiKey);
-  }
-
-  getBaseUrl(): string {
-    switch (BigNumber.from(this.network.chainId).toNumber()) {
-      case 1:
-        return get_required_env_var("ETHSCANAPI_HTTPS_URL_MAINNET");
-      case 10:
-        return get_required_env_var("ETHSCANAPI_OPTIMISTIC_HTTPS_URL_MAINNET");
-      /*
-      case 100:
-        return 'https://api.gnosisscan.io';
-      case 137:
-        return 'https://api.polygonscan.com';
-      */
-      case 42161:
-        return get_required_env_var("ETHSCANAPI_ARBITRUM_HTTPS_URL_MAINNET");
-      case 11155111:
-        return get_required_env_var("ETHSCANAPI_SEPOLIA_HTTPS_URL_TESTNET");
-      case 56:
-        return get_required_env_var("ETHSCANAPI_BSC_HTTPS_URL_MAINNET");
-    }
-
-    throw new Error(`Unsupported network ${JSON.stringify(this.network.chainId)}`);
   }
 
   isCommunityResource(): boolean {

@@ -1,5 +1,5 @@
 import localforage from 'localforage';
-import { RandomNumber } from '@umbracash/umbra-js';
+import { RandomNumber } from 'umbra-mod-umbra-js';
 
 import { keccak256, BigNumber, getAddress, hexZeroPad } from 'src/utils/ethers';
 import { toAddress, lookupOrReturnAddresses } from 'src/utils/address';

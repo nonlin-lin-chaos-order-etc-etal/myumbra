@@ -108,7 +108,7 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted, ref, watch } from 'vue';
 import { QForm } from 'quasar';
-import { UserAnnouncement, KeyPair, utils, AnnouncementDetail } from '@umbracash/umbra-js';
+import { UserAnnouncement, KeyPair, utils, AnnouncementDetail } from 'umbra-mod-umbra-js';
 import { BigNumber, computeAddress, isHexString } from 'src/utils/ethers';
 import useSettingsStore from 'src/store/settings';
 import useWalletStore from 'src/store/wallet';
