@@ -113,7 +113,7 @@
             v-model="recipientId"
             :debounce="500"
             :disable="isSending"
-            placeholder="vitalik.eth"
+            placeholder="0xABCD"
             lazy-rules
             :hideBottomSpace="true"
             :rules="isValidId"
@@ -313,7 +313,7 @@
                       v-model="Send.receiver"
                       :debounce="500"
                       :disable="isSending"
-                      placeholder="vitalik.eth"
+                      placeholder="0xABCD"
                       lazy-rules
                       :rules="isValidId"
                     />
@@ -327,7 +327,7 @@
                       filled
                       :options="tokensExt"
                       option-label="symbol"
-                      ref="tokenBaseSelectRef"
+                      ref="tokenBaseSelectRef_batch_{{index}}"
                       :token-balances="balances"
                       lazy-rules
                     />
@@ -378,7 +378,7 @@
                     :label="$t('Send.token')"
                     :options="tokensExt"
                     option-label="symbol"
-                    ref="tokenBaseSelectRef"
+                    ref="tokenBaseSelectRef_batch_{{index}}"
                     :token-balances="balances"
                     class="input-container-token"
                   />
@@ -553,12 +553,14 @@ function useSendForm() {
         tlv.push(a);
         console.log(a);
       }
+      /*
       if(customTokens.value){
           for (var b of customTokens.value) {
             tlv.push(b);
             console.log(b);
           }
       }
+      */
       tlv.push(new AddCustomTokenCommand());
       const tokenListExt : Array<TokenInfoExtended | AddCustomTokenCommand> = tlv;
       console.log('tokenListExt', tokenListExt)
@@ -575,6 +577,9 @@ function useSendForm() {
   // Form refs for triggering validation via form items' `validate()` method.
   const recipientIdBaseInputRef = ref<InstanceType<typeof BaseInput> | null>(null);
   const tokenBaseSelectRef = ref<InstanceType<typeof BaseSelect> | null>(null);
+  
+  //provide(/* key */ 'tokenBaseSelectRef', /* value */ tokenBaseSelectRef);
+  
   const humanAmountBaseInputRef = ref<InstanceType<typeof BaseInput> | null>(null);
 
   // Form parameters.
@@ -599,6 +604,20 @@ function useSendForm() {
   const batchSendSupportedChains = [1, 10, 42161, 11155111, 56];
   const batchSendIsSupported = ref(false);
 
+  /*onMounted(() => {
+    if (tokenBaseSelectRef.value) tokenBaseSelectRef.value.setBaseSelectRefToChild(tokenBaseSelectRef)else console.log('tokenBaseSelectRef.value is false');
+    
+    const syncBatch = (batchSends: unknown[]): void => {
+        batchSends.forEach((_elem: unknown, index: number) => {
+            const ref_ = eval(`tokenBaseSelectRef_batch_${index}`);
+            if (ref_.value) ref_.value.setBaseSelectRefToChild(ref_)
+        });
+    }
+    
+    watch(batchSends, (arr) => syncBatch(arr));
+  });
+  */
+  
   // Computed form parameters.
   const showAdvancedWarning = computed(() => advancedAcknowledged.value === false && useNormalPubKey.value === true);
   const sendAdvancedButton = computed(() => useNormalPubKey.value && advancedMode.value);
@@ -1305,7 +1324,7 @@ export default defineComponent({
   setup() {
     const isMaintenanceMode = Number(process.env.MAINTENANCE_MODE_SEND) === 1;
     return { generatePaymentLink, ...useSendForm(), isMaintenanceMode };
-  },
+  }
 });
 </script>
 

@@ -5,6 +5,7 @@ import BaseInput from 'components/BaseInput.vue';
 import BaseSelect from 'components/BaseSelect.vue';
 import LoadingSpinner from 'components/LoadingSpinner.vue';
 import ProgressIndicator from 'components/ProgressIndicator.vue';
+import AddCustomTokenModal from 'components/AddCustomTokenModal.vue';
 
 // more info on params: https://quasar.dev/quasar-cli/cli-documentation/boot-files#Anatomy-of-a-boot-file
 export default boot(({ app }) => {
@@ -13,4 +14,5 @@ export default boot(({ app }) => {
   app.component('base-select', BaseSelect as unknown as Component);
   app.component('loading-spinner', LoadingSpinner as unknown as Component);
   app.component('progress-indicator', ProgressIndicator as unknown as Component);
+  app.component('add-custom-token-modal', AddCustomTokenModal as unknown as Component);
 });

@@ -81,7 +81,7 @@ export let tokensExport: TokenInfoExtended[] = [];
 
 // ========================================== Main Store ===========================================
 export default function useWalletStore() {
-  const { lastWallet, setLastWallet } = useSettingsStore();
+  const { lastWallet, setLastWallet, customTokens } = useSettingsStore();
 
   onMounted(() => {
     // Initialize onboard.js if not yet done
@@ -157,6 +157,8 @@ export default function useWalletStore() {
     if (!provider.value) throw new Error('Provider not connected');
     if (!relayer.value) throw new Error('Relayer instance not found');
     const multicall = new Contract(MULTICALL_ADDRESS, MULTICALL_ABI, provider.value);
+    
+    //included customTokens from browser's local storage into wallet's balances
 
     // Generate balance calls using Multicall contract
     const calls = tokens.value.map((token) => {
@@ -503,6 +505,9 @@ export default function useWalletStore() {
     if (!tokensArray.length || tokensArray[0].address !== NATIVE_TOKEN_ADDRESS) {
       tokensArray = [NATIVE_TOKEN.value, ...tokensArray];
     }
+    
+    if (customTokens.value != null)
+        tokensArray = [...tokensArray, ...customTokens.value]
 
     tokensExport = tokensArray;
     return tokensArray;
