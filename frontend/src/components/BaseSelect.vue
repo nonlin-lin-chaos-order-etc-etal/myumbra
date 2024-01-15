@@ -277,7 +277,7 @@ export default defineComponent({
                 color: 'green-4',
                 textColor: 'white',
                 //icon: 'cloud_done',
-                message: 'Submitted'
+                message: 'Added OK'
             });
             submittedOK.value = true;
             
