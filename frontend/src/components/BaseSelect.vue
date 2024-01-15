@@ -101,9 +101,9 @@
               ></q-input>
 
               <div>
-                <q-btn label="OK" type="submit" color="primary" class="q-ml-sm"></q-btn>
-                <q-btn v-close-popup color="primary" class="q-ml-sm">Cancel</q-btn>
-                <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm"></q-btn>
+                <q-btn label="OK" type="submit" color="primary" class="q-ml-sm" enabled="buttonsEnabled"></q-btn>
+                <q-btn v-close-popup color="primary" class="q-ml-sm" enabled="buttonsEnabled">Cancel</q-btn>
+                <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" enabled="buttonsEnabled"></q-btn>
               </div>
             </q-form>
           </q-page>
@@ -153,7 +153,8 @@ export default defineComponent({
     } = useSettingsStore();
     const {
         chainId,
-        tokens
+        tokens,
+        getTokenBalances
     } = useWalletStore();    
 
     const $q = useQuasar()
@@ -180,6 +181,8 @@ export default defineComponent({
         else console.log('known token triggered, value:', value);
         unconvertedToken.value = value;
     }
+    
+    const buttonsEnabled = ref(true);
 
     const unconvertedToken  = ref<unknown|null>(null);
     
@@ -227,8 +230,10 @@ export default defineComponent({
       isAddCustomTokenDialogVisible,
       isAddress,
       isIntString,
+      getTokenBalances,
+      buttonsEnabled,
 
-      onSubmit () {
+      onSubmit() {
         const tokenSymbol_ = tokenSymbol;
         if (tokenSymbol_.value == null) throw '!tokenSymbol.value'
         if (decimals.value == null) throw '!decimals.value'
@@ -260,21 +265,33 @@ export default defineComponent({
         
         newCustomTokens.sort((ta, tb) => strcmp ( ta.symbol, tb.symbol ) );
         setCustomTokens(newCustomTokens);
-        
         $q.notify({
             color: 'green-4',
             textColor: 'white',
             //icon: 'cloud_done',
-            message: 'Submitted'
+            message: 'Fetching token balances...'
         });
-        submittedOK.value = true;
-        
-        //select the newly added token in the current tokens dropdown
-        console.log('content onSubmit:', content);
-        if(content.value!=null)content.value=token;
-        
-        //hide
-        isAddCustomTokenDialogVisible.value = false;
+        buttonsEnabled.value = false;
+        getTokenBalances().then(()=>{
+            $q.notify({
+                color: 'green-4',
+                textColor: 'white',
+                //icon: 'cloud_done',
+                message: 'Submitted'
+            });
+            submittedOK.value = true;
+            
+            //select the newly added token in the current tokens dropdown
+            console.log('content onSubmit:', content);
+            if(content.value!=null)content.value=token;
+            
+            //hide
+            isAddCustomTokenDialogVisible.value = false;
+            buttonsEnabled.value = true;
+        }).catch((e)=>{
+            buttonsEnabled.value = true;
+            console.error(e);
+        });
       },
 
       onReset () {
