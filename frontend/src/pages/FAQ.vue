@@ -384,9 +384,9 @@
               <template v-slot:optimism>
                 <a :href="getEtherscanUrl(deployments.registry, 10)" class="hyperlink" target="_blank"> Optimism </a>
               </template>
-              <template v-slot:polygon>
+              <!--<template v-slot:polygon>
                 <a :href="getEtherscanUrl(deployments.registry, 137)" class="hyperlink" target="_blank"> Polygon </a>
-              </template>
+              </template>-->
               <template v-slot:arbitrum>
                 <a :href="getEtherscanUrl(deployments.registry, 42161)" class="hyperlink" target="_blank"> Arbitrum </a>
               </template>
@@ -395,11 +395,16 @@
                   Sepolia
                 </a>
               </template>
-              <template v-slot:gnosis>
+              <template v-slot:goerli>
+                <a :href="getEtherscanUrl(deployments.registry, 5)" class="hyperlink" target="_blank">
+                  Goerli
+                </a>
+              </template>
+              <!--<template v-slot:gnosis>
                 <a :href="getEtherscanUrl(deployments.registry, 100)" class="hyperlink" target="_blank">
                   Gnosis Chain
                 </a>
-              </template>
+              </template>-->
             </i18n-t>
           </ul>
         </f-a-q-item>
@@ -611,8 +616,8 @@ export default defineComponent({
   components: { FAQItem },
   setup() {
     const deployments = {
-      umbra: '0xFb2dc580Eed955B528407b4d36FfaFe3da685401',
-      registry: '0x31fe56609C65Cd0C510E7125f051D440424D38f3',
+      umbra: '0x5e130c6CAECB0F2263d3c6D101f93B6fc893f9C4',
+      registry: '0x3aF4cb85E9Bf649e3b3dEC9E0681C5Fc448c1C49',
     };
     const route = useRoute();
     return { ...useScrollToElement(route), deployments, getEtherscanUrl };

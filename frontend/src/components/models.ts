@@ -72,6 +72,21 @@ export const supportedChains: Array<Chain> = [
     logoURI: ETH_NETWORK_LOGO,
   },
   {
+    chainId: '0x5', // 5 as hex
+    chainName: 'Goerli',
+    nativeCurrency: {
+      address: NATIVE_TOKEN_ADDRESS,
+      name: 'Ether',
+      symbol: 'ETH',
+      decimals: 18,
+      logoURI: ETH_NETWORK_LOGO,
+    },
+    rpcUrls: [String(process.env.HTTPS_ETH_RPC_PROVIDER_URL__GOERLI_TESTNET)],
+    blockExplorerUrls: [String(process.env.EXPLORER_URL__ETH_TESTNET_GOERLI)],
+    iconUrls: [ETH_NETWORK_LOGO],
+    logoURI: ETH_NETWORK_LOGO,
+  },
+  {
     chainId: '0xa', // 10 as hex
     chainName: 'Optimism',
     nativeCurrency: {

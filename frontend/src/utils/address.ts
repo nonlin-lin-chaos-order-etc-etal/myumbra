@@ -17,7 +17,7 @@ import { tc } from '../boot/i18n';
 //import Resolution from '@unstoppabledomains/resolution';
 import { MAINNET_PROVIDER, /*POLYGON_PROVIDER,*/ MULTICALL_ABI, MULTICALL_ADDRESS } from 'src/utils/constants';
 //import { AddressZero, defaultAbiCoder } from 'src/utils/ethers';
-import { UmbraApi } from 'src/utils/umbra-api';
+//import { UmbraApi } from 'src/utils/umbra-api';
 
 // ================================================== Address Helpers ==================================================
 
@@ -262,7 +262,7 @@ export const isAddressSafe = async (
     if (has) reasons.push(`${isDomain ? tc('Utils.Address.address-it-resolves-to') : tc('Utils.Address.it')} ${tc('Utils.Address.has-poap-tokens')}`); // prettier-ignore
   };
 
-  const isGitcoinContributor = async (address: string) => {
+  /*const isGitcoinContributor = async (address: string) => {
     let resp;
     try {
       resp = await UmbraApi.isGitcoinContributor(address);
@@ -273,9 +273,9 @@ export const isAddressSafe = async (
     if (resp && resp.isContributor) {
       reasons.push(`${tc('Utils.Address.address-it-resolves-to')} ${tc('Utils.Address.gitcoin-contributor')}.`);
     }
-  };
+  };*/
   promises.push(hasPOAPsCheck());
-  promises.push(isGitcoinContributor(destinationAddress));
+  //promises.push(isGitcoinContributor(destinationAddress));
 
   // Check if address has contributed to Gitcoin Grants
   // TODO

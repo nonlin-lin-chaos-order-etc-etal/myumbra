@@ -21,11 +21,12 @@ const chainIds = {
   hardhat: 1337,
   mainnet: 1,
   bsc: 56,
-  polygon: 137,
+  //polygon: 137,
   arbitrum: 42161,
   optimism: 10,
   sepolia: 11155111,
-  gnosis_chain: 100,
+  goerli: 5,
+  //gnosis_chain: 100,
 };
 
 // Ensure that we have all the environment variables we need.
@@ -44,6 +45,12 @@ if (!HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET_) {
   console.warn('Please set your HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET in a .env file');
 }
 let  HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET: string = <string>HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET_
+
+let HTTPS_ETH_RPC_PROVIDER_URL__GOERLI_TESTNET_: string|undefined = process.env.HTTPS_ETH_RPC_PROVIDER_URL__GOERLI_TESTNET;
+if (!HTTPS_ETH_RPC_PROVIDER_URL__GOERLI_TESTNET_) {
+  console.warn('Please set your HTTPS_ETH_RPC_PROVIDER_URL__GOERLI_TESTNET in a .env file');
+}
+let  HTTPS_ETH_RPC_PROVIDER_URL__GOERLI_TESTNET: string = <string>HTTPS_ETH_RPC_PROVIDER_URL__GOERLI_TESTNET_
 
 let HTTPS_ETH_RPC_PROVIDER_URL__ETH_MAINNET_ = process.env.HTTPS_ETH_RPC_PROVIDER_URL__ETH_MAINNET
 if (!HTTPS_ETH_RPC_PROVIDER_URL__ETH_MAINNET_) {
@@ -121,6 +128,7 @@ const config: HardhatUserConfig = {
       url: 'http://127.0.0.1:8545',
     },
     sepolia: createTestnetConfig('sepolia', HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET),
+    goerli: createTestnetConfig('goerli', HTTPS_ETH_RPC_PROVIDER_URL__GOERLI_TESTNET),
     mainnet: {
       accounts: {
         count: 10,
