@@ -52,6 +52,7 @@ const subgraphs = {
 
 const chainConfigs: Record<number, ChainConfig> = {
   1: { chainId: 1, umbraAddress, batchSendAddress, startBlock: 12343914, subgraphUrl: subgraphs[1] }, // Mainnet
+  5: { chainId: 5, umbraAddress, batchSendAddress, startBlock: 0, subgraphUrl: subgraphs[1] }, // Goerli
   10: { chainId: 10, umbraAddress, batchSendAddress, startBlock: 4069556, subgraphUrl: subgraphs[10] }, // Optimism
   100: { chainId: 100, umbraAddress, batchSendAddress, startBlock: 28237950, subgraphUrl: subgraphs[100] }, // Gnosis Chain
   137: { chainId: 137, umbraAddress, batchSendAddress, startBlock: 20717318, subgraphUrl: subgraphs[137] }, // Polygon
@@ -118,6 +119,7 @@ const isEth = (token: string) => {
   return getAddress(token) === ETH_ADDRESS; // throws if `token` is not a valid address
 };
 
+
 const get_rpc_url_by_chain_id = (chainId: number): string => {
   // For Hardhat, we just use the mainnet chain ID to avoid errors in tests, but this doesn't affect anything.
   if (chainId === 1 || chainId === 1337) return String(process.env.HTTPS_ETH_RPC_PROVIDER_URL__ETH_MAINNET);
@@ -125,18 +127,10 @@ const get_rpc_url_by_chain_id = (chainId: number): string => {
   if (chainId === 11155111) return String(process.env.HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET);
   if (chainId === 42161) return String(process.env.HTTPS_ETH_RPC_PROVIDER_URL__ARBITRUM_MAINNET);
   if (chainId === 56) return String(process.env.HTTPS_ETH_RPC_PROVIDER_URL__BSC_MAINNET);
+  if (chainId === 5) return String(process.env.HTTPS_ETH_RPC_PROVIDER_URL__GOERLI_TESTNET);
 
   throw new Error(`No RPC URL for chainId ${chainId}.`);
 }
-/*
- * @notice Returns the Infura RPC URL for the provided chainId and Infura ID
- *
-const infuraUrl = (chainId: BigNumberish, infuraId: string) => {
-  chainId = BigNumber.from(chainId).toNumber();
-  return get_rpc_url_by_chain_id(chainId);
-};
-*/
-
 
 
 export class Umbra {

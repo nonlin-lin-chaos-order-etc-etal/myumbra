@@ -4,17 +4,17 @@
 
 import { StaticJsonRpcProvider } from './ethers';
 import {
-  //FeeEstimateResponse,
+  FeeEstimateResponse,
   Provider,
   TokenInfoExtended,
-  //RelayResponse,
+  RelayResponse,
   //TokenListResponse,
-  //WithdrawalInputs,
+  WithdrawalInputs,
 } from 'components/models';
 //import { jsonFetch } from 'src/utils/utils';
 
 export class UmbraApi {
-  static baseUrl = 'https://umbra-api.example.com'; // works for all networks
+  static baseUrl = 'https://api.umbra-mod.tranoo.com'; // works for all networks
   constructor(
     readonly tokens: TokenInfoExtended[],
     readonly chainId: number,
@@ -44,22 +44,21 @@ export class UmbraApi {
     return new UmbraApi(tokens, chainId, nativeMinSend);
   };
 
-  getFeeEstimate = (/*tokenAddress: string*/): unknown => {
-    //const response = await fetch(`${UmbraApi.baseUrl}/tokens/${tokenAddress}/estimate?chainId=${this.chainId}`);
-    //const data = (await response.json()) as FeeEstimateResponse;
-    //if ('error' in data) throw new Error(`Could not estimate fee: ${data.error}`);
-    return {};
+  getFeeEstimate = async (tokenAddress: string) => {
+    const response = await fetch(`${UmbraApi.baseUrl}/tokens/${tokenAddress}/estimate?chainId=${this.chainId}`);
+    const data = (await response.json()) as FeeEstimateResponse;
+    if ('error' in data) throw new Error(`Could not estimate fee: ${data.error}`);
+    return data;
   };
 
-  relayWithdraw = (/*tokenAddress: string, withdrawalInputs: WithdrawalInputs*/): unknown => {
-    //const body = JSON.stringify(withdrawalInputs);
-    //const headers = { 'Content-Type': 'application/json' };
-    //const url = `${UmbraApi.baseUrl}/tokens/${tokenAddress}/relay?chainId=${this.chainId}`;
-    //const response = await fetch(url, { method: 'POST', body, headers });
-    //const data = (await response.json()) as RelayResponse;
-    //if ('error' in data) throw new Error(`Could not relay withdraw: ${data.error}`);
-    //return data;
-    throw 'TODO frontend/umbra-api.ts:relayWithdraw';
+  relayWithdraw = async (tokenAddress: string, withdrawalInputs: WithdrawalInputs) => {
+    const body = JSON.stringify(withdrawalInputs);
+    const headers = { 'Content-Type': 'application/json' };
+    const url = `${UmbraApi.baseUrl}/tokens/${tokenAddress}/relay?chainId=${this.chainId}`;
+    const response = await fetch(url, { method: 'POST', body, headers });
+    const data = (await response.json()) as RelayResponse;
+    if ('error' in data) throw new Error(`Could not relay withdraw: ${data.error}`);
+    return data;
   };
 
   /*static isGitcoinContributor = (address: string): {isContributor: Boolean} => {

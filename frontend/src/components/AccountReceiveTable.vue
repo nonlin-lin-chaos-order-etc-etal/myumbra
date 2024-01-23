@@ -374,7 +374,9 @@ import AccountReceiveTableLossWarning from 'components/AccountReceiveTableLossWa
 import AccountReceiveTableWithdrawConfirmation from 'components/AccountReceiveTableWithdrawConfirmation.vue';
 import BaseTooltip from 'src/components/BaseTooltip.vue';
 import WithdrawForm from 'components/WithdrawForm.vue';
-import { FeeEstimateResponse } from 'components/models';
+import {
+    FeeEstimateResponse
+} from 'components/models';
 import { formatNameOrAddress, lookupOrReturnAddresses, toAddress, isAddressSafe } from 'src/utils/address';
 import { MAINNET_PROVIDER, MULTICALL_ABI, MULTICALL_ADDRESS } from 'src/utils/constants';
 import {
@@ -506,7 +508,7 @@ function useReceivedFundsTable(userAnnouncements: Ref<UserAnnouncement[]>, spend
       return;
     }
     isFeeLoading.value = true;
-    activeFee.value = await relayer.value?.getFeeEstimate(tokenAddress);
+    activeFee.value = await relayer.value?.getFeeEstimate(tokenAddress); // TODO update this // { fee: '0', token: getTokenInfo(tokenAddress) }
     isFeeLoading.value = false;
   };
 
