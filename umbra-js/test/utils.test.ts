@@ -9,19 +9,24 @@ import { Event } from '../src/ethers';
 const ethersProvider = ethers.provider;
 
 const HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET = <string>process.env.HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET;
-if (!HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET) throw new Error('Please set your HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET in a .env file');
+if (!HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET)
+  throw new Error('Please set your HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET in a .env file');
 
 const HTTPS_ETH_RPC_PROVIDER_URL__ETH_MAINNET = <string>process.env.HTTPS_ETH_RPC_PROVIDER_URL__ETH_MAINNET;
-if (!HTTPS_ETH_RPC_PROVIDER_URL__ETH_MAINNET) throw new Error('Please set your HTTPS_ETH_RPC_PROVIDER_URL__ETH_MAINNET in a .env file');
+if (!HTTPS_ETH_RPC_PROVIDER_URL__ETH_MAINNET)
+  throw new Error('Please set your HTTPS_ETH_RPC_PROVIDER_URL__ETH_MAINNET in a .env file');
 
 const HTTPS_ETH_RPC_PROVIDER_URL__POLYGON_MAINNET = <string>process.env.HTTPS_ETH_RPC_PROVIDER_URL__POLYGON_MAINNET;
-if (!HTTPS_ETH_RPC_PROVIDER_URL__POLYGON_MAINNET) throw new Error('Please set your HTTPS_ETH_RPC_PROVIDER_URL__POLYGON_MAINNET in a .env file');
+if (!HTTPS_ETH_RPC_PROVIDER_URL__POLYGON_MAINNET)
+  throw new Error('Please set your HTTPS_ETH_RPC_PROVIDER_URL__POLYGON_MAINNET in a .env file');
 
 const HTTPS_ETH_RPC_PROVIDER_URL__OPTIMISM_MAINNET = <string>process.env.HTTPS_ETH_RPC_PROVIDER_URL__OPTIMISM_MAINNET;
-if (!HTTPS_ETH_RPC_PROVIDER_URL__OPTIMISM_MAINNET) throw new Error('Please set your HTTPS_ETH_RPC_PROVIDER_URL__OPTIMISM_MAINNET in a .env file');
+if (!HTTPS_ETH_RPC_PROVIDER_URL__OPTIMISM_MAINNET)
+  throw new Error('Please set your HTTPS_ETH_RPC_PROVIDER_URL__OPTIMISM_MAINNET in a .env file');
 
 const HTTPS_ETH_RPC_PROVIDER_URL__ARBITRUM_MAINNET = <string>process.env.HTTPS_ETH_RPC_PROVIDER_URL__ARBITRUM_MAINNET;
-if (!HTTPS_ETH_RPC_PROVIDER_URL__ARBITRUM_MAINNET) throw new Error('Please set your HTTPS_ETH_RPC_PROVIDER_URL__ARBITRUM_MAINNET in a .env file');
+if (!HTTPS_ETH_RPC_PROVIDER_URL__ARBITRUM_MAINNET)
+  throw new Error('Please set your HTTPS_ETH_RPC_PROVIDER_URL__ARBITRUM_MAINNET in a .env file');
 
 // Public key and address corresponding to stratus4.eth
 //const publicKey = ;
@@ -149,7 +154,7 @@ describe('Utilities', () => {
       expect(keys2.viewingPublicKey).to.equal(pubKeysUmbra.viewingPublicKey);
     });
 
-/*
+    /*
     it('looks up recipients by ENS, advanced mode off', async () => {
       const ethersProvider = new StaticJsonRpcProvider(`${HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET}`);
       const keys = await utils.lookupRecipient('stratus4.eth', ethersProvider);
@@ -190,7 +195,8 @@ describe('Utilities', () => {
 
     it('looks up transaction history on polygon', async () => {
       const ethersProvider = new ethers.providers.StaticJsonRpcProvider(
-        `${HTTPS_ETH_RPC_PROVIDER_URL__POLYGON_MAINNET}`) as EthersProvider;
+        `${HTTPS_ETH_RPC_PROVIDER_URL__POLYGON_MAINNET}`
+      ) as EthersProvider;
       const txHash = await utils.getSentTransaction(address, ethersProvider);
       expect(txHash).to.have.lengthOf(66);
     });

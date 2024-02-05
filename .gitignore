@@ -163,3 +163,5 @@ lcov.info
 *~
 tmp*
 .idea
+
+.yarn .yarnrc

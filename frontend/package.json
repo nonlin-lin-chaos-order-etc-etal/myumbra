@@ -2,8 +2,7 @@
   "name": "umbra-mod-frontend",
   "version": "2.0.2",
   "description": "Send and receive stealth payments with the Umbra protocol",
-  "productName": "Umbra",
-  "author": "Matt Solomon <matt@mattsolomon.dev>",
+  "productName": "Umbra-mod",
   "private": true,
   "scripts": {
     "lint": "yarn lint:eslint && yarn lint:i18n",
@@ -12,6 +11,7 @@
     "prettier": "prettier --write .",
     "test": "jest",
     "dev": "quasar dev",
+    "serve": "quasar serve",
     "build": "quasar build && cp _redirects dist/spa/",
     "clean": "rimraf dist",
     "precommit": "lint-staged"
@@ -20,7 +20,7 @@
     "@adraffy/ens-normalize": "1.9.2",
     "@metamask/jazzicon": "^2.0.0",
     "@quasar/extras": "^1.15.8",
-    "@umbra-mod/umbra-mod-umbra-js": "./umbra-js",
+    "umbra-mod-umbra-js": "./umbra-js",
     "@uniswap/token-lists": "^1.0.0-beta.19",
     "@unstoppabledomains/resolution": "8.5.0",
     "@web3-onboard/coinbase": "^2.2.5",
@@ -40,6 +40,7 @@
     "yaml-loader": "0.6.0"
   },
   "devDependencies": {
+    "umbra-mod-umbra-js": "./umbra-js",
     "@babel/eslint-parser": "^7.19.1",
     "@intlify/vue-i18n-loader": "^4.2.0",
     "@quasar/app-webpack": "3.6.2",

@@ -363,7 +363,7 @@
 import { computed, defineComponent, watch, PropType, ref, watchEffect, Ref } from 'vue';
 import { copyToClipboard } from 'quasar';
 import { BigNumber, Contract, joinSignature, formatUnits, TransactionResponse, Web3Provider } from 'src/utils/ethers';
-import { Umbra, UserAnnouncement, KeyPair, utils } from 'umbra-mod-umbra-js';
+import { Umbra, UserAnnouncement, KeyPair, utils } from './umbra-js';
 import { tc } from 'src/boot/i18n';
 import useSettingsStore from 'src/store/settings';
 import useStatusesStore from 'src/store/statuses';

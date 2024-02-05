@@ -4,7 +4,4 @@ import { default as Resolution } from '@unstoppabledomains/resolution';
 import * as utils from '../src/utils/utils';
 import { StaticJsonRpcProvider } from '../src/ethers';
 
-
-
-describe('(СNS is removed); functions', () => {
-});
+describe('(СNS is removed); functions', () => {});

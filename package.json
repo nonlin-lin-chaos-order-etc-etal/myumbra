@@ -4,18 +4,7 @@
   "description": "Send and receive stealth payments with the Umbra protocol",
   "author": "mds <17163988+mds1@users.noreply.github.com>, hypnosis",
   "private": true,
-  "workspaces": {
-    "packages": [
-      "contracts-core",
-      "contracts-periphery",
-      "frontend",
-      "umbra-js"
-    ],
-    "nohoist": [
-      "**/mocha",
-      "**/jest"
-    ]
-  },
+  "workspaces": ["contracts-core","contracts-periphery","frontend","umbra-js"],
   "devDependencies": {
     "eslint": "^7.14.0",
     "eslint-config-prettier": "^6.14.0",
@@ -25,6 +14,9 @@
     "prettier": "^2.1.2",
     "rimraf": "^3.0.2",
     "typescript": "^4.0.3"
+  },
+  "dependencies": {
+    "umbra-mod-umbra-js": "./umbra-js"
   },
   "resolutions": {
     "y18n": "^4.0.1"

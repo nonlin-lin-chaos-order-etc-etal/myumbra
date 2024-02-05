@@ -19,12 +19,12 @@ const chainIds = {
 // Ensure that we have all the environment variables we need.
 const mnemonic = 'test test test test test test test test test test test junk';
 
-let HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET_: string|undefined = process.env.HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET;
+let HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET_: string | undefined =
+  process.env.HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET;
 if (!HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET_) {
   console.warn('Please set your HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET in a .env file');
 }
-let HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET: string = <string>HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET_
-
+let HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET: string = <string>HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET_;
 
 function createTestnetConfig(network: keyof typeof chainIds, https_network_url: string): NetworkUserConfig {
   const url = https_network_url;

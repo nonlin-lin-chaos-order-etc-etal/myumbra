@@ -3,8 +3,25 @@
   "version": "0.0.2",
   "description": "Contracts for the Umbra Protocol",
   "dependencies": {
+    "@ethersproject/abi": "^5.0.0",
+    "@ethersproject/bytes": "^5.0.0",
+    "@ethersproject/providers": "^5.0.0",
+    "@octokit/core": "3",
     "@openzeppelin/contracts": "3.4.1",
-    "@umbra-mod/umbra-mod-umbra-js": "./umbra-js"
+    "@typechain/ethers-v5": "^10.2.0",
+    "@typechain/hardhat": "7.0.0",
+    "@umbra-mod/umbra-mod-umbra-js": "./umbra-js",
+    "bn.js": "^4.11.0",
+    "ethers": "5.7.2",
+    "hardhat": "^2.17.1",
+    "react": "^18.0.0",
+    "typechain": "^8.3.1",
+    "typescript": "^3.9.7",
+    "web3": "^1.0.0-beta.36",
+    "web3-core-helpers": "^1.2.1",
+    "web3-core-promievent": "^1.2.1",
+    "web3-eth-abi": "^1.2.1",
+    "web3-utils": "^1.2.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^9.1.2",

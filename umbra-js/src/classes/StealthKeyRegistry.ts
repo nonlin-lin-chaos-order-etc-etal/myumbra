@@ -8,7 +8,7 @@ import { Contract, JsonRpcSigner, TransactionResponse } from '../ethers';
 import type { EthersProvider } from '../types';
 
 // Address of the StealthKeyRegistry is the same on all supported networks
-const stealthKeyRegistry = '0x31fe56609C65Cd0C510E7125f051D440424D38f3';
+const stealthKeyRegistry = '0x3aF4cb85E9Bf649e3b3dEC9E0681C5Fc448c1C49'; //TODO correct this
 const abi = [
   'event StealthKeyChanged(address indexed registrant, uint256 spendingPubKeyPrefix, uint256 spendingPubKey, uint256 viewingPubKeyPrefix, uint256 viewingPubKey)',
   'function DOMAIN_SEPARATOR() view returns (bytes32)',
@@ -73,6 +73,6 @@ export class StealthKeyRegistry {
     const { prefix: viewingPrefix, pubKeyXCoordinate: viewingPubKeyX } = KeyPair.compressPublicKey(viewingPublicKey);
 
     // Send transaction to set the keys
-    return registry.setStealthKeys(spendingPrefix, spendingPubKeyX, viewingPrefix, viewingPubKeyX);
+    return registry.setStealthKeys(spendingPrefix, spendingPubKeyX, viewingPrefix, viewingPubKeyX, { type: undefined });
   }
 }

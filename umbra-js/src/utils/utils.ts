@@ -176,7 +176,7 @@ export async function getSentTransaction(address: string, ethersProvider: Ethers
 }
 
 // Takes an ENS, CNS, or address, and returns the checksummed address
-export async function toAddress(name: string, _provider: EthersProvider) {
+export function toAddress(name: string/*, _provider: EthersProvider*/) {
   // If the name is already an address, just return it.
   if (name.length === lengths.address && isHexString(name)) return getAddress(name);
 
@@ -233,7 +233,7 @@ export async function lookupRecipient(
 
   // The remaining checks are dependent on the advanced mode option. The provided identifier is now either an
   // ENS name, CNS name, or address, so we resolve it to an address
-  const address = await toAddress(id, provider); // throws if an invalid address is provided
+  const address = toAddress(id/*, provider*/); // throws if an invalid address is provided
 
   // If we're not using advanced mode, use the StealthKeyRegistry
   if (!advanced) {
@@ -302,7 +302,7 @@ export function assertValidPrivateKey(key: string) {
  * @param name Name or domain to test
  * @param provider ethers provider instance
  */
-export async function getPublicKeysLegacy(name: string, _provider: EthersProvider) {
+export function getPublicKeysLegacy(name: string/*, _provider: EthersProvider*/) {
   if (!isDomain(name)) throw new Error(`Name ${name} is not a valid domain`);
   try {
     // First try ENS (throws on failure)
@@ -527,7 +527,11 @@ export async function assertSupportedAddress(recipientId: string) {
   if (!isSupported) throw new Error('Address is invalid or unavailable');
 }
 
-console.log(`HTTPS_ENS_RPC_MAINNET_PROVIDER_URL="${String(process.env.HTTPS_ENS_RPC_MAINNET_PROVIDER_URL)} (umbra-js/src/utils/utils.ts)"`)
+console.log(
+  `HTTPS_ENS_RPC_MAINNET_PROVIDER_URL="${String(
+    process.env.HTTPS_ENS_RPC_MAINNET_PROVIDER_URL
+  )} (umbra-js/src/utils/utils.ts)"`
+);
 
 export async function checkSupportedAddresses(recipientIds: string[]) {
   // Check for public key being passed in, and if so derive the corresponding address.
@@ -543,8 +547,8 @@ export async function checkSupportedAddresses(recipientIds: string[]) {
   // If there are a lot of ENS or CNS names here this will send too many RPC requests and trigger
   // errors. The current use case of this method takes addresses, so this should not be a problem.
   // If it becomes a problem, add a batched version of toAddress.
-  const provider = new StaticJsonRpcProvider(`${String(process.env.HTTPS_ENS_RPC_MAINNET_PROVIDER_URL)}`); // JFIX5; `https://mainnet.infura.io/v3/${String(process.env.INFURA_ID)}`);
-  const addresses = await Promise.all(recipientIds.map((recipientId) => toAddress(recipientId, provider)));
+  //const provider = new StaticJsonRpcProvider(`${String(process.env.HTTPS_ENS_RPC_MAINNET_PROVIDER_URL)}`); // JFIX5; `https://mainnet.infura.io/v3/${String(process.env.INFURA_ID)}`);
+  const addresses = await Promise.all(recipientIds.map((recipientId) => toAddress(recipientId/*, provider*/)));
 
   // Initialize output, start by assuming all are supported.
   const isSupportedList = addresses.map((_) => true); // eslint-disable-line @typescript-eslint/no-unused-vars

@@ -39,9 +39,10 @@ import { ETH_ADDRESS, UMBRA_BATCH_SEND_ABI } from '../utils/constants';
 import type { Announcement, ChainConfig, EthersProvider, GraphFilterOverride, ScanOverrides, SendOverrides, SubgraphAnnouncement, UserAnnouncement, AnnouncementDetail, SendBatch, SendData} from '../types'; // prettier-ignore
 
 // Mapping from chainId to contract information
-const umbraAddress = '0xFb2dc580Eed955B528407b4d36FfaFe3da685401'; // same on all supported networks
-const batchSendAddress = '0xDbD0f5EBAdA6632Dde7d47713ea200a7C2ff91EB'; // same on all supported networks
+const umbraAddress = '0xFb2dc580Eed955B528407b4d36FfaFe3da685401'; // same on all supported networks // TODO update this
+const batchSendAddress = '0xDbD0f5EBAdA6632Dde7d47713ea200a7C2ff91EB'; // same on all supported networks // TODO update this
 const subgraphs = {
+  // TODO update this
   1: 'https://api.goldsky.com/api/public/project_clfmn098ebuoc3svybn2l2tvp/subgraphs/umbra-mainnet/v1.1.0/gn',
   10: 'https://api.goldsky.com/api/public/project_clfmn098ebuoc3svybn2l2tvp/subgraphs/umbra-optimism/v1.1.0/gn',
   100: 'https://api.goldsky.com/api/public/project_clfmn098ebuoc3svybn2l2tvp/subgraphs/umbra-xdai/v1.1.0/gn',
@@ -82,7 +83,7 @@ const parseChainConfig = (chainConfig: ChainConfig | number) => {
     if (validChainIds.includes(String(chainConfig))) {
       return chainConfigs[chainConfig];
     }
-    throw new Error('Unsupported chain ID provided');
+    throw new Error(`Unsupported chain ID provided: '${chainConfig}'.`);
   }
 
   // Otherwise verify the user's provided chain config is valid and return it
@@ -119,7 +120,6 @@ const isEth = (token: string) => {
   return getAddress(token) === ETH_ADDRESS; // throws if `token` is not a valid address
 };
 
-
 const get_rpc_url_by_chain_id = (chainId: number): string => {
   // For Hardhat, we just use the mainnet chain ID to avoid errors in tests, but this doesn't affect anything.
   if (chainId === 1 || chainId === 1337) return String(process.env.HTTPS_ETH_RPC_PROVIDER_URL__ETH_MAINNET);
@@ -130,8 +130,7 @@ const get_rpc_url_by_chain_id = (chainId: number): string => {
   if (chainId === 5) return String(process.env.HTTPS_ETH_RPC_PROVIDER_URL__GOERLI_TESTNET);
 
   throw new Error(`No RPC URL for chainId ${chainId}.`);
-}
-
+};
 
 export class Umbra {
   readonly chainConfig: ChainConfig;
@@ -154,7 +153,7 @@ export class Umbra {
     if (this.chainConfig.batchSendAddress) {
       this.batchSendContract = new Contract(this.chainConfig.batchSendAddress, UMBRA_BATCH_SEND_ABI, provider);
     }
-    let KEY_VALUE : string = get_rpc_url_by_chain_id(parseInt(`${this.chainConfig.chainId}`));
+    const KEY_VALUE: string = get_rpc_url_by_chain_id(parseInt(`${this.chainConfig.chainId}`));
     this.fallbackProvider = new StaticJsonRpcProvider(KEY_VALUE);
   }
 
