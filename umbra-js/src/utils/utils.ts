@@ -527,7 +527,7 @@ export async function assertSupportedAddress(recipientId: string) {
   if (!isSupported) throw new Error('Address is invalid or unavailable');
 }
 
-console.log(`HTTPS_ENS_RPC_MAINNET_PROVIDER_URL="${String(process.env.HTTPS_ENS_RPC_MAINNET_PROVIDER_URL)} (umbra-js/src/utils/utils.ts)"`)
+//console.log(`HTTPS_ENS_RPC_MAINNET_PROVIDER_URL="${String(process.env.HTTPS_ENS_RPC_MAINNET_PROVIDER_URL)} (umbra-js/src/utils/utils.ts)"`)
 
 export async function checkSupportedAddresses(recipientIds: string[]) {
   // Check for public key being passed in, and if so derive the corresponding address.
@@ -543,8 +543,8 @@ export async function checkSupportedAddresses(recipientIds: string[]) {
   // If there are a lot of ENS or CNS names here this will send too many RPC requests and trigger
   // errors. The current use case of this method takes addresses, so this should not be a problem.
   // If it becomes a problem, add a batched version of toAddress.
-  const provider = new StaticJsonRpcProvider(`${String(process.env.HTTPS_ENS_RPC_MAINNET_PROVIDER_URL)}`); // JFIX5; `https://mainnet.infura.io/v3/${String(process.env.INFURA_ID)}`);
-  const addresses = await Promise.all(recipientIds.map((recipientId) => toAddress(recipientId, provider)));
+  //const provider = new StaticJsonRpcProvider(`${String(process.env.HTTPS_ENS_RPC_MAINNET_PROVIDER_URL)}`); // JFIX5; `https://mainnet.infura.io/v3/${String(process.env.INFURA_ID)}`);
+  const addresses = await Promise.all(recipientIds.map( (recipientId) => recipientId ));
 
   // Initialize output, start by assuming all are supported.
   const isSupportedList = addresses.map((_) => true); // eslint-disable-line @typescript-eslint/no-unused-vars

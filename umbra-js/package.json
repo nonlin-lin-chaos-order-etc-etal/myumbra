@@ -1,6 +1,6 @@
 {
   "name": "umbra-mod-umbra-js",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "description": "Send and receive stealth payments",
   "main": "build/src/index.js",
   "types": "build/src/index.d.ts",

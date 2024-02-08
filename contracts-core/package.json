@@ -4,7 +4,8 @@
   "description": "Contracts for the Umbra Protocol",
   "dependencies": {
     "@openzeppelin/contracts": "3.4.1",
-    "@umbra-mod/umbra-mod-umbra-js": "./umbra-js"
+    "@umbra-mod/umbra-mod-umbra-js": "./umbra/umbra-js",
+    "hardhat": "^2.19.4"
   },
   "devDependencies": {
     "@commitlint/cli": "^9.1.2",
