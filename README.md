@@ -135,8 +135,8 @@ Umbra contracts are deployed at the same address on each network where Umbra res
 
 |Contract          |Type     |Address|
 |------------------|---------|-------|
-|Umbra             |Core     |[0xFb2dc580Eed955B528407b4d36FfaFe3da685401](https://blockscan.com/address/0xfb2dc580eed955b528407b4d36ffafe3da685401)|
-|StealthKeyRegistry|Core     |[0x31fe56609C65Cd0C510E7125f051D440424D38f3](https://blockscan.com/address/0x31fe56609c65cd0c510e7125f051d440424d38f3)|
+|Umbra             |Core     |[0x5e130c6CAECB0F2263d3c6D101f93B6fc893f9C4](https://blockscan.com/address/0x5e130c6CAECB0F2263d3c6D101f93B6fc893f9C4)|
+|StealthKeyRegistry|Core     |[0x3aF4cb85E9Bf649e3b3dEC9E0681C5Fc448c1C49](https://blockscan.com/address/0x3aF4cb85E9Bf649e3b3dEC9E0681C5Fc448c1C49)|
 |UmbraBatchSend    |Periphery|[0xDbD0f5EBAdA6632Dde7d47713ea200a7C2ff91EB](https://blockscan.com/address/0xDbD0f5EBAdA6632Dde7d47713ea200a7C2ff91EB)|
 
 ### Contributions

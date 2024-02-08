@@ -26,6 +26,12 @@ if (!HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET_) {
 }
 let HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET: string = <string>HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET_;
 
+let HTTPS_ETH_RPC_PROVIDER_URL__GOERLI_TESTNET_: string|undefined = process.env.HTTPS_ETH_RPC_PROVIDER_URL__GOERLI_TESTNET;
+if (!HTTPS_ETH_RPC_PROVIDER_URL__GOERLI_TESTNET_) {
+  console.warn('Please set your HTTPS_ETH_RPC_PROVIDER_URL__GOERLI_TESTNET in a .env file');
+}
+let  HTTPS_ETH_RPC_PROVIDER_URL__GOERLI_TESTNET: string = <string>HTTPS_ETH_RPC_PROVIDER_URL__GOERLI_TESTNET_
+
 function createTestnetConfig(network: keyof typeof chainIds, https_network_url: string): NetworkUserConfig {
   const url = https_network_url;
   return {
@@ -45,7 +51,7 @@ const config: HardhatUserConfig = {
   networks: {
     hardhat: {
       forking: {
-        url: HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET,
+        url: HTTPS_ETH_RPC_PROVIDER_URL__GOERLI_TESTNET,
       },
       chainId: chainIds.hardhat,
       accounts: {
@@ -56,6 +62,7 @@ const config: HardhatUserConfig = {
       },
     },
     sepolia: createTestnetConfig('sepolia', HTTPS_ETH_RPC_PROVIDER_URL__SEPOLIA_TESTNET),
+    goerli: createTestnetConfig('goerli', HTTPS_ETH_RPC_PROVIDER_URL__GOERLI_TESTNET),
   },
   paths: {
     cache: './cache',

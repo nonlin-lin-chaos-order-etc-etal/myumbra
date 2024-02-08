@@ -6,7 +6,7 @@ import { JsonRpcSigner } from '../src/ethers';
 import { Umbra } from '../src/classes/Umbra';
 import { StealthKeyRegistry } from '../src/classes/StealthKeyRegistry';
 
-const stealthKeyRegistryAddress = '0x31fe56609C65Cd0C510E7125f051D440424D38f3';
+const stealthKeyRegistryAddress = '0x3aF4cb85E9Bf649e3b3dEC9E0681C5Fc448c1C49';
 
 describe('StealthKeyRegistry class', () => {
   let stealthKeyRegistry: StealthKeyRegistry;
