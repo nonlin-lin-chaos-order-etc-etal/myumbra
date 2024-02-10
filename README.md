@@ -147,4 +147,9 @@ Contributions to Umbra are welcome! Fork the project, create a new branch from m
 
 Umbra is available under the [MIT](LICENSE.txt) license.
 
-Copyright (c) 2023 ScopeLift
+ * Copyright (c) 2023 ScopeLift
+ * Copyright (c) 2024 HypnosisI2P. All rights reserved.
+
+## See also
+  * https://github.com/nonlin-lin-chaos-order-etc-etal/umbra-mod
+  * https://github.com/nonlin-lin-chaos-order-etc-etal/umbra-api-server Relayer server (little amount of tests) source code
